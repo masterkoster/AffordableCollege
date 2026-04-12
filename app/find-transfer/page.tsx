@@ -2,6 +2,8 @@ import { prisma } from '@/lib/prisma'
 import Link from 'next/link'
 import { FindTransferForm } from './FindTransferForm'
 
+export const dynamic = 'force-dynamic'
+
 export default async function FindTransferPage() {
   const guides = await prisma.transferGuide.findMany({
     include: {
