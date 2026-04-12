@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: oklch(0.98 0.005 250);
+    --foreground: oklch(0.2 0.05 250);
+    --card: oklch(1 0 0);
+    --card-foreground: oklch(0.2 0.05 250);
+    --popover: oklch(1 0 0);
+    --popover-foreground: oklch(0.2 0.05 250);
+    --primary: oklch(0.3 0.08 250);
+    --primary-foreground: oklch(0.98 0 0);
+    --secondary: oklch(0.95 0.01 250);
+    --secondary-foreground: oklch(0.3 0.08 250);
+    --muted: oklch(0.95 0.01 250);
+    --muted-foreground: oklch(0.5 0.03 250);
+    --accent: oklch(0.65 0.2 145);
+    --accent-foreground: oklch(0.98 0 0);
+    --destructive: oklch(0.577 0.245 27.325);
+    --destructive-foreground: oklch(0.98 0 0);
+    --border: oklch(0.9 0.01 250);
+    --input: oklch(0.9 0.01 250);
+    --ring: oklch(0.3 0.08 250);
+    --chart-1: oklch(0.3 0.08 250);
+    --chart-2: oklch(0.65 0.2 145);
+    --chart-3: oklch(0.5 0.05 250);
+    --chart-4: oklch(0.75 0.15 145);
+    --chart-5: oklch(0.4 0.06 250);
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: oklch(0.15 0.03 250);
+    --foreground: oklch(0.95 0 0);
+    --card: oklch(0.2 0.04 250);
+    --card-foreground: oklch(0.95 0 0);
+    --popover: oklch(0.2 0.04 250);
+    --popover-foreground: oklch(0.95 0 0);
+    --primary: oklch(0.65 0.2 145);
+    --primary-foreground: oklch(0.15 0.03 250);
+    --secondary: oklch(0.25 0.04 250);
+    --secondary-foreground: oklch(0.95 0 0);
+    --muted: oklch(0.25 0.04 250);
+    --muted-foreground: oklch(0.65 0.02 250);
+    --accent: oklch(0.65 0.2 145);
+    --accent-foreground: oklch(0.15 0.03 250);
+    --destructive: oklch(0.5 0.2 27.325);
+    --destructive-foreground: oklch(0.95 0 0);
+    --border: oklch(0.3 0.04 250);
+    --input: oklch(0.3 0.04 250);
+    --ring: oklch(0.65 0.2 145);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom component classes */
+.card {
+  @apply bg-white rounded-xl border border-slate-200 shadow-sm;
+}
+
+.input-field {
+  @apply w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500;
+}
+
+.input-label {
+  @apply block text-xs font-medium text-slate-600 mb-1;
+}
+
+.btn-primary {
+  @apply px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50;
+}
+
+.btn-secondary {
+  @apply px-4 py-2 bg-white border border-slate-300 text-slate-700 rounded-lg text-sm font-medium hover:bg-slate-50 transition-colors;
+}
+
+/* Additional Tailwind v4 style utilities */
+@layer utilities {
+  .text-background { color: var(--background); }
+  .text-foreground { color: var(--foreground); }
+  .text-card { color: var(--card); }
+  .text-card-foreground { color: var(--card-foreground); }
+  .text-primary { color: var(--primary); }
+  .text-primary-foreground { color: var(--primary-foreground); }
+  .text-secondary { color: var(--secondary); }
+  .text-secondary-foreground { color: var(--secondary-foreground); }
+  .text-muted { color: var(--muted); }
+  .text-muted-foreground { color: var(--muted-foreground); }
+  .text-accent { color: var(--accent); }
+  .text-accent-foreground { color: var(--accent-foreground); }
+  .text-destructive { color: var(--destructive); }
+  
+  .bg-background { background-color: var(--background); }
+  .bg-foreground { background-color: var(--foreground); }
+  .bg-card { background-color: var(--card); }
+  .bg-primary { background-color: var(--primary); }
+  .bg-primary-foreground { background-color: var(--primary-foreground); }
+  .bg-secondary { background-color: var(--secondary); }
+  .bg-muted { background-color: var(--muted); }
+  .bg-accent { background-color: var(--accent); }
+  .bg-destructive { background-color: var(--destructive); }
+  
+  .border-border { border-color: var(--border); }
+  .border-input { border-color: var(--input); }
+  .border-ring { border-color: var(--ring); }
+  
+  .ring-ring { --tw-ring-color: var(--ring); }
+  
+  .text-chart-1 { color: var(--chart-1); }
+  .text-chart-2 { color: var(--chart-2); }
+  .text-chart-3 { color: var(--chart-3); }
+  .text-chart-4 { color: var(--chart-4); }
+  .text-chart-5 { color: var(--chart-5); }
+}

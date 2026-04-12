@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// =============================================================================
+// USER - Both students and admins
+// =============================================================================
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      String   @default("STUDENT") // "STUDENT" or "ADMIN"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  studentLeads Lead[] @relation("StudentLeads")
+}
+
+// =============================================================================
+// SCHOOLS - Community colleges and universities
+// =============================================================================
+model School {
+  id       String @id @default(uuid())
+  name     String
+  code     String @unique // "OCC", "Macomb", "Oakland Univ"
+  type     String // "CC" or "UNIVERSITY"
+  
+  origins  TransferGuide[] @relation("OriginSchool")
+  targets  TransferGuide[] @relation("TargetSchool")
+}
+
+// =============================================================================
+// MAJORS - Academic programs
+// =============================================================================
+model Major {
+  id   String @id @default(uuid())
+  name String // "Computer Science"
+  code String @unique // "CS"
+  
+  guides TransferGuide[]
+}
+
+// =============================================================================
+// TRANSFER GUIDE - Pre-stored transfer agreements
+// =============================================================================
+model TransferGuide {
+  id              String  @id @default(uuid())
+  originSchoolId  String
+  targetSchoolId  String
+  majorId         String
+  
+  pdfUrl          String? // Link to original PDF
+  requirements   String  // Page 2 text: "GPA >= 2.5"
+  autoAdmitGPA    Float?  // 2.8 - if above this, auto-admit
+  
+  // JSON array of courses: [{code: "MTH 161", name: "Calculus I", credits: 4}, ...]
+  courses         String    
+  
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  originSchool    School   @relation("OriginSchool", fields: [originSchoolId], references: [id])
+  targetSchool   School   @relation("TargetSchool", fields: [targetSchoolId], references: [id])
+  major          Major    @relation(fields: [majorId], references: [id])
+  
+  leads          Lead[]
+
+  @@unique([originSchoolId, targetSchoolId, majorId])
+}
+
+// =============================================================================
+// LEAD - A student applying through a transfer guide
+// =============================================================================
+model Lead {
+  id              String    @id @default(uuid())
+  studentId       String
+  guideId         String
+  
+  // Student info (copied at creation time)
+  studentName     String
+  studentEmail    String
+  studentPhone    String?
+  
+  // Application data
+  gpa             Float?
+  currentSchoolId String?   // Their current CC
+  
+  stage           String    @default("NEW_LEAD")
+  
+  // Offer data
+  offerType       String?   // "DIRECT_ACCEPTANCE" or "TRANSFER_SCHOLARSHIP"
+  scholarshipAmount Float? // 1000, 2000, etc.
+  offerSentAt     DateTime?
+  offerResponse   String?   // "ACCEPTED", "DECLINED", "PENDING"
+  
+  // Dates
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  enrolledAt       DateTime?
+  
+  student         User         @relation("StudentLeads", fields: [studentId], references: [id])
+  guide           TransferGuide @relation(fields: [guideId], references: [id])
+  
+  @@index([studentId])
+  @@index([guideId])
+  @@index([stage])
+}
