@@ -59,20 +59,32 @@ type AvailableUniversity = {
   name: string
 }
 
-// Michigan scholarships (2025-26)
-const scholsDB: Record<string, Record<string, number>> = {
-  'UDM': { '4.0': 14000, '3.5': 12000, '3.0': 12000, '2.5': 11000, '2.0': 6000 },
-  'WSU': { '4.0': 6500, '3.5': 6500, '3.0': 4500, '2.5': 2500, '2.0': 0 },
-  'GVSU': { '4.0': 4000, '3.5': 4000, '3.0': 2000, '2.5': 0, '2.0': 0 },
+// Michigan scholarships (2025-26) - with scholarship names
+const scholsDB: Record<string, { name: string; amounts: Record<string, number> }> = {
+  'UDM': { name: 'University of Detroit Mercy', amounts: { '4.0': 14000, '3.5': 12000, '3.0': 12000, '2.5': 11000, '2.0': 6000 } },
+  'WSU': { name: 'Wayne State', amounts: { '4.0': 6500, '3.5': 6500, '3.0': 4500, '2.5': 2500, '2.0': 0 } },
+  'GVSU': { name: 'Grand Valley State', amounts: { '4.0': 4000, '3.5': 4000, '3.0': 2000, '2.5': 0, '2.0': 0 } },
+  'OU': { name: 'Oakland University', amounts: { '4.0': 5000, '3.5': 4000, '3.0': 3000, '2.5': 2000, '2.0': 1000 } },
+  'EMU': { name: 'Eastern Michigan', amounts: { '4.0': 3500, '3.5': 3000, '3.0': 2500, '2.5': 1500, '2.0': 0 } },
+  'WMU': { name: 'Western Michigan', amounts: { '4.0': 4000, '3.5': 3500, '3.0': 2500, '2.5': 1500, '2.0': 0 } },
+  'FSU': { name: 'Ferris State', amounts: { '4.0': 3000, '3.5': 2500, '3.0': 2000, '2.5': 1000, '2.0': 0 } },
+  'SVSU': { name: 'Saginaw Valley State', amounts: { '4.0': 3500, '3.5': 3000, '3.0': 2500, '2.5': 1500, '2.0': 0 } },
 }
-function getSchol(uni: string, gpa: string): number {
-  const t = scholsDB[uni]
-  if (!t) return 0
+
+// Michigan Achievement Scholarship (state-wide, for MI residents)
+const miAchieveSchol = { name: 'Michigan Achievement Scholarship', amount: 5500 }
+
+function getScholWithName(uni: string, gpa: string): { name: string; amount: number } | null {
+  const s = scholsDB[uni]
+  if (!s) return null
   const g = parseFloat(gpa)
-  if (g >= 3.5) return t['3.5'] || t['4.0']
-  if (g >= 3.0) return t['3.0']
-  if (g >= 2.5) return t['2.5']
-  return t['2.0'] || 0
+  let amount = 0
+  if (g >= 3.5) amount = s.amounts['3.5'] || s.amounts['4.0']
+  else if (g >= 3.0) amount = s.amounts['3.0']
+  else if (g >= 2.5) amount = s.amounts['2.5']
+  else amount = s.amounts['2.0'] || 0
+  if (amount > 0) return { name: s.name + ' Transfer Scholarship', amount }
+  return null
 }
 const gpaOpts = [
   { v: '4.0', l: '4.0' }, { v: '3.5', l: '3.5+' }, { v: '3.0', l: '3.0+' },
@@ -789,11 +801,16 @@ function ComparisonSection({
 }) {
   const [isMI, setIsMI] = useState(true)
   const [gpa, setGPA] = useState('3.0')
-  const pSchol = getSchol(guide.targetSchool.code.toUpperCase(), gpa)
-  const cSchol = getSchol(compareGuide.targetSchool.code.toUpperCase(), gpa)
-  const miAch = isMI ? 5500 : 0
-  const pNet = Math.max(0, primaryStats.totalCost - pSchol - miAch)
-  const cNet = Math.max(0, compareStats.totalCost - cSchol - miAch)
+  
+  // Get scholarship info with names
+  const pScholInfo = getScholWithName(guide.targetSchool.code.toUpperCase(), gpa)
+  const cScholInfo = getScholWithName(compareGuide.targetSchool.code.toUpperCase(), gpa)
+  const pScholAmount = pScholInfo?.amount || 0
+  const cScholAmount = cScholInfo?.amount || 0
+  
+  const miAch = isMI ? miAchieveSchol.amount : 0
+  const pNet = Math.max(0, primaryStats.totalCost - pScholAmount - miAch)
+  const cNet = Math.max(0, compareStats.totalCost - cScholAmount - miAch)
   const winner = pNet < cNet ? guide.targetSchool.name : cNet < pNet ? compareGuide.targetSchool.name : null
   const saveAmt = winner ? Math.abs(pNet - cNet) : 0
   const maxNet = Math.max(pNet, cNet)
@@ -814,6 +831,70 @@ function ComparisonSection({
             </select>
           </div>
         </div>
+        
+        {/* Scholarships Section - Shows specific scholarships for each school */}
+        <div className="mb-4">
+          <h3 className="text-sm font-semibold text-slate-700 mb-2">Scholarships</h3>
+          <div className="grid md:grid-cols-2 gap-3">
+            {/* Primary University Scholarships */}
+            <div className="bg-white rounded-lg p-3 border border-blue-200">
+              <p className="text-sm font-medium text-blue-700 mb-2">{guide.targetSchool.name}</p>
+              <div className="space-y-1">
+                {pScholInfo && (
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-600">{pScholInfo.name}</span>
+                    <span className="text-green-600 font-medium">-${pScholInfo.amount.toLocaleString()}</span>
+                  </div>
+                )}
+                {isMI && (
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-600">{miAchieveSchol.name}</span>
+                    <span className="text-green-600 font-medium">-${miAchieveSchol.amount.toLocaleString()}</span>
+                  </div>
+                )}
+                {!pScholInfo && !isMI && (
+                  <span className="text-xs text-slate-400">No scholarships at this GPA</span>
+                )}
+                {(pScholAmount + (isMI ? miAch : 0)) > 0 && (
+                  <div className="flex justify-between text-xs font-medium pt-1 border-t border-slate-100">
+                    <span className="text-slate-700">Total</span>
+                    <span className="text-green-600">-${(pScholAmount + (isMI ? miAch : 0)).toLocaleString()}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+            
+            {/* Compare University Scholarships */}
+            <div className="bg-white rounded-lg p-3 border border-green-200">
+              <p className="text-sm font-medium text-green-700 mb-2">{compareGuide.targetSchool.name}</p>
+              <div className="space-y-1">
+                {cScholInfo && (
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-600">{cScholInfo.name}</span>
+                    <span className="text-green-600 font-medium">-${cScholInfo.amount.toLocaleString()}</span>
+                  </div>
+                )}
+                {isMI && (
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-600">{miAchieveSchol.name}</span>
+                    <span className="text-green-600 font-medium">-${miAchieveSchol.amount.toLocaleString()}</span>
+                  </div>
+                )}
+                {!cScholInfo && !isMI && (
+                  <span className="text-xs text-slate-400">No scholarships at this GPA</span>
+                )}
+                {(cScholAmount + (isMI ? miAch : 0)) > 0 && (
+                  <div className="flex justify-between text-xs font-medium pt-1 border-t border-slate-100">
+                    <span className="text-slate-700">Total</span>
+                    <span className="text-green-600">-${(cScholAmount + (isMI ? miAch : 0)).toLocaleString()}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Cost Table */}
         <div className="overflow-hidden rounded-lg border border-green-200">
           <table className="w-full text-sm">
             <thead className="bg-green-100">
@@ -830,9 +911,9 @@ function ComparisonSection({
                 <td className="px-3 py-2 text-right">${compareStats.totalCost.toLocaleString()}</td>
               </tr>
               <tr className="border-t border-green-200 bg-green-50/50">
-                <td className="px-3 py-2">Less: Scholarships{isMI && <span className="text-xs text-green-600 block">+ MI Achieve</span>}</td>
-                <td className="px-3 py-2 text-right text-green-600">-${(pSchol + miAch).toLocaleString()}</td>
-                <td className="px-3 py-2 text-right text-green-600">-${(cSchol + miAch).toLocaleString()}</td>
+                <td className="px-3 py-2">Less: Scholarships</td>
+                <td className="px-3 py-2 text-right text-green-600">-${(pScholAmount + miAch).toLocaleString()}</td>
+                <td className="px-3 py-2 text-right text-green-600">-${(cScholAmount + miAch).toLocaleString()}</td>
               </tr>
               <tr className="border-t border-green-200 bg-green-100 font-bold">
                 <td className="px-3 py-2">YOUR NET COST</td>
