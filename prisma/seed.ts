@@ -69,7 +69,7 @@ async function main() {
   }
   console.log('Majors created')
 
-  // Transfer Guides - ONLY from real PDFs (11 total)
+  // Transfer Guides - ONLY from real PDFs with program details from university catalogs
   const guides = [
     // Henry Ford College → Oakland University
     { o: 'HenryFord', t: 'OU', m: 'BIO', r: 'GPA >= 2.5', a: 2.8, c: [
@@ -86,7 +86,7 @@ async function main() {
       { c: 'BIO 270', n: 'Exercise Physiology', cr: 3 },
       { c: 'ENG 131', n: 'Composition I', cr: 3 },
       { c: 'ENG 132', n: 'Composition II', cr: 3 },
-    ] },
+    ], programDesc: 'The Biology program prepares students for careers in research, healthcare, education, and graduate studies. Students study molecular biology, ecology, physiology, and genetics with hands-on laboratory experience.', degreeType: 'B.S.', totalCredits: 128, catalogUrl: 'https://catalog.oakland.edu/preview_program.php?catoid=72&poid=16498' },
     { o: 'HenryFord', t: 'OU', m: 'BUS', r: 'GPA >= 2.5', a: 2.8, c: [
       { c: 'MATH 141', n: 'Statistics', cr: 3 },
       { c: 'MATH 150', n: 'Finite Mathematics', cr: 3 },
@@ -101,7 +101,7 @@ async function main() {
       { c: 'BEC 151', n: 'Principles of Macroeconomics', cr: 3 },
       { c: 'BEC 152', n: 'Principles of Microeconomics', cr: 3 },
       { c: 'CIS 100', n: 'Introduction to IT', cr: 3 },
-    ] },
+    ], programDesc: 'The Business Administration program provides a comprehensive foundation in business principles including accounting, finance, management, marketing, and operations. Students develop skills for leadership roles in diverse organizational settings.', degreeType: 'B.S.', totalCredits: 128, catalogUrl: 'https://catalog.oakland.edu/preview_program.php?catoid=72&poid=16500' },
     { o: 'HenryFord', t: 'OU', m: 'CS', r: 'GPA >= 2.5', a: 2.8, c: [
       { c: 'MATH 180', n: 'Calculus I', cr: 5 },
       { c: 'MATH 183', n: 'Calculus II', cr: 5 },
@@ -114,7 +114,7 @@ async function main() {
       { c: 'ENG 132', n: 'Composition II', cr: 3 },
       { c: 'CIS 129', n: 'Programming I', cr: 3 },
       { c: 'CIS 170', n: 'Programming II', cr: 3 },
-    ] },
+    ], programDesc: 'The Computer Science program equips students for successful careers in the industry and graduate studies. It emphasizes formulating abstract concepts, creating innovative computational solutions, designing complex systems, and incorporating cutting-edge technologies. ABET accredited.', degreeType: 'B.S.', totalCredits: 128, catalogUrl: 'https://catalog.oakland.edu/preview_program.php?catoid=72&poid=16518' },
     // Macomb Community College → Oakland University
     { o: 'Macomb', t: 'OU', m: 'BUS', r: 'GPA >= 2.5', a: 2.8, c: [
       { c: 'MATH 1340', n: 'Statistics', cr: 3 },
@@ -127,7 +127,7 @@ async function main() {
       { c: 'ITCS 1010', n: 'Introduction to IT', cr: 3 },
       { c: 'SPCH 1060', n: 'Fundamentals of Speaking', cr: 3 },
       { c: 'SPCH 1200', n: 'Interpersonal Communication', cr: 3 },
-    ] },
+    ], programDesc: 'The Business Administration program provides a comprehensive foundation in business principles including accounting, finance, management, marketing, and operations. Students develop skills for leadership roles in diverse organizational settings.', degreeType: 'B.S.', totalCredits: 128, catalogUrl: 'https://catalog.oakland.edu/preview_program.php?catoid=72&poid=16500' },
     { o: 'Macomb', t: 'OU', m: 'CS', r: 'GPA >= 2.5', a: 2.8, c: [
       { c: 'MATH 1760', n: 'Calculus I', cr: 4 },
       { c: 'MATH 1770', n: 'Calculus II', cr: 4 },
@@ -141,7 +141,7 @@ async function main() {
       { c: 'ITCS 1170', n: 'Object-Oriented Programming', cr: 4 },
       { c: 'ITCS 2250', n: 'Data Structures', cr: 4 },
       { c: 'ITCS 2530', n: 'Computer Systems', cr: 3 },
-    ] },
+    ], programDesc: 'The Computer Science program equips students for successful careers in the industry and graduate studies. It emphasizes formulating abstract concepts, creating innovative computational solutions, designing complex systems, and incorporating cutting-edge technologies. ABET accredited.', degreeType: 'B.S.', totalCredits: 128, catalogUrl: 'https://catalog.oakland.edu/preview_program.php?catoid=72&poid=16518' },
     { o: 'Macomb', t: 'OU', m: 'ENG', r: 'GPA >= 2.5', a: 2.8, c: [
       { c: 'MATH 1760', n: 'Calculus I', cr: 4 },
       { c: 'MATH 1770', n: 'Calculus II', cr: 4 },
@@ -155,7 +155,7 @@ async function main() {
       { c: 'ENGL 1190', n: 'Composition II', cr: 3 },
       { c: 'PRDE 1400', n: 'Engineering Graphics', cr: 3 },
       { c: 'PRDE 1520', n: 'CAD I', cr: 3 },
-    ] },
+    ], programDesc: 'The Mechanical Engineering program prepares students for careers in design, manufacturing, and automotive industries. Students learn engineering principles, thermodynamics, mechanics, and CAD design with hands-on projects.', degreeType: 'B.S.E.', totalCredits: 128, catalogUrl: 'https://catalog.oakland.edu/preview_program.php?catoid=72&poid=16576' },
     // Oakland Community College → Oakland University
     { o: 'OCC', t: 'OU', m: 'BIO', r: 'GPA >= 2.5', a: 2.8, c: [
       { c: 'MTH 1222', n: 'Pre-Calculus', cr: 4 },
@@ -172,7 +172,7 @@ async function main() {
       { c: 'BIO 2560', n: 'Microbiology', cr: 4 },
       { c: 'BIO 2630', n: 'Genetics', cr: 4 },
       { c: 'BIO 2710', n: 'Ecology', cr: 3 },
-    ] },
+    ], programDesc: 'The Biology program prepares students for careers in research, healthcare, education, and graduate studies. Students study molecular biology, ecology, physiology, and genetics with hands-on laboratory experience.', degreeType: 'B.S.', totalCredits: 128, catalogUrl: 'https://catalog.oakland.edu/preview_program.php?catoid=72&poid=16498' },
     { o: 'OCC', t: 'OU', m: 'BUS', r: 'GPA >= 2.5', a: 2.8, c: [
       { c: 'MTH 1221', n: 'College Algebra', cr: 3 },
       { c: 'MTH 1331', n: 'Finite Mathematics', cr: 3 },
@@ -187,13 +187,13 @@ async function main() {
       { c: 'BUS 2030', n: 'Business Law', cr: 3 },
       { c: 'ECO 2610', n: 'Principles of Economics - Micro', cr: 3 },
       { c: 'ECO 2620', n: 'Principles of Economics - Macro', cr: 3 },
-    ] },
+    ], programDesc: 'The Business Administration program provides a comprehensive foundation in business principles including accounting, finance, management, marketing, and operations. Students develop skills for leadership roles in diverse organizational settings.', degreeType: 'B.S.', totalCredits: 128, catalogUrl: 'https://catalog.oakland.edu/preview_program.php?catoid=72&poid=16500' },
     { o: 'OCC', t: 'OU', m: 'CS', r: 'GPA >= 2.5', a: 2.8, c: [
       { c: 'PHY 2400', n: 'Physics I', cr: 5 },
       { c: 'BIO 1530', n: 'General Biology I', cr: 4 },
       { c: 'ENG 1510', n: 'Composition I', cr: 3 },
       { c: 'ENG 1520', n: 'Composition II', cr: 3 },
-    ] },
+    ], programDesc: 'The Computer Science program equips students for successful careers in the industry and graduate studies. It emphasizes formulating abstract concepts, creating innovative computational solutions, designing complex systems, and incorporating cutting-edge technologies. ABET accredited.', degreeType: 'B.S.', totalCredits: 128, catalogUrl: 'https://catalog.oakland.edu/preview_program.php?catoid=72&poid=16518' },
     // Schoolcraft College → Oakland University
     { o: 'Schoolcraft', t: 'OU', m: 'BUS', r: 'GPA >= 2.5', a: 2.8, c: [
       { c: 'MATH 122', n: 'Statistics', cr: 3 },
@@ -207,7 +207,7 @@ async function main() {
       { c: 'ECON 201', n: 'Principles of Economics - Macro', cr: 3 },
       { c: 'ECON 202', n: 'Principles of Economics - Micro', cr: 3 },
       { c: 'CIS 120', n: 'Introduction to IT', cr: 3 },
-    ] },
+    ], programDesc: 'The Business Administration program provides a comprehensive foundation in business principles including accounting, finance, management, marketing, and operations. Students develop skills for leadership roles in diverse organizational settings.', degreeType: 'B.S.', totalCredits: 128, catalogUrl: 'https://catalog.oakland.edu/preview_program.php?catoid=72&poid=16500' },
     { o: 'Schoolcraft', t: 'OU', m: 'CS', r: 'GPA >= 2.5', a: 2.8, c: [
       { c: 'MATH 150', n: 'Calculus I', cr: 5 },
       { c: 'MATH 151', n: 'Calculus II', cr: 5 },
@@ -217,7 +217,7 @@ async function main() {
       { c: 'BIOL 120', n: 'General Biology I', cr: 4 },
       { c: 'ENG 101', n: 'Composition I', cr: 3 },
       { c: 'ENG 102', n: 'Composition II', cr: 3 },
-    ] },
+    ], programDesc: 'The Computer Science program equips students for successful careers in the industry and graduate studies. It emphasizes formulating abstract concepts, creating innovative computational solutions, designing complex systems, and incorporating cutting-edge technologies. ABET accredited.', degreeType: 'B.S.', totalCredits: 128, catalogUrl: 'https://catalog.oakland.edu/preview_program.php?catoid=72&poid=16518' },
     // Wayne State University Transfer Agreements (from real PDFs)
     // Macomb → WSU Business
     { o: 'Macomb', t: 'WSU', m: 'BUS', r: 'GPA >= 2.5', a: 2.5, c: [
@@ -422,8 +422,16 @@ async function main() {
     const courses = g.c.map((x: any) => ({ code: x.c, name: x.n, credits: x.cr }))
     await prisma.transferGuide.upsert({
       where: { originSchoolId_targetSchoolId_majorId: { originSchoolId: schools[g.o].id, targetSchoolId: schools[g.t].id, majorId: majorIds[g.m] } },
-      update: {},
-      create: { originSchoolId: schools[g.o].id, targetSchoolId: schools[g.t].id, majorId: majorIds[g.m], requirements: g.r, autoAdmitGPA: g.a, courses: JSON.stringify(courses) }
+      update: { 
+        requirements: g.r, 
+        autoAdmitGPA: g.a, 
+        courses: JSON.stringify(courses),
+        programDescription: g.programDesc || null,
+        degreeType: g.degreeType || null,
+        totalCredits: g.totalCredits || null,
+        catalogUrl: g.catalogUrl || null,
+      },
+      create: { originSchoolId: schools[g.o].id, targetSchoolId: schools[g.t].id, majorId: majorIds[g.m], requirements: g.r, autoAdmitGPA: g.a, courses: JSON.stringify(courses), programDescription: g.programDesc || null, degreeType: g.degreeType || null, totalCredits: g.totalCredits || null, catalogUrl: g.catalogUrl || null }
     })
     console.log('Guide: ' + g.o + ' -> ' + g.t + ' (' + g.m + ')')
   }

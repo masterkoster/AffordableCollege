@@ -144,6 +144,33 @@ export default async function TransferGuideDetailPage({
               </div>
             </div>
           </div>
+
+          {/* Program Details */}
+          {guide.programDescription && (
+            <div className="mt-4 pt-4 border-t border-blue-200">
+              <div className="flex items-center gap-2 mb-2">
+                <span className="text-xs font-semibold bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                  {guide.degreeType}
+                </span>
+                {guide.totalCredits && (
+                  <span className="text-xs text-slate-500">
+                    {guide.totalCredits} credits
+                  </span>
+                )}
+              </div>
+              <p className="text-sm text-slate-600 mb-2">{guide.programDescription}</p>
+              {guide.catalogUrl && (
+                <a 
+                  href={guide.catalogUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-xs text-blue-600 hover:text-blue-800 underline"
+                >
+                  View Full Program Requirements →
+                </a>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="card p-6 mb-6">

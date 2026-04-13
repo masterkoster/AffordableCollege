@@ -71,8 +71,14 @@ model TransferGuide {
   requirements   String  // Page 2 text: "GPA >= 2.5"
   autoAdmitGPA    Float?  // 2.8 - if above this, auto-admit
   
+  // Program details from university catalog
+  programDescription String? // Description of the program at the university
+  degreeType         String? // e.g., "B.S.", "B.A.", "B.S.E."
+  totalCredits       Int?    // Total credits needed for the degree
+  catalogUrl         String? // Link to the program in the university catalog
+  
   // JSON array of courses: [{code: "MTH 161", name: "Calculus I", credits: 4}, ...]
-  courses         String    
+  courses         String
   
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
