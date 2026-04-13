@@ -29,6 +29,7 @@ async function main() {
     { code: 'GVSU', name: 'Grand Valley State University', type: 'UNIVERSITY' },
     { code: 'FSU', name: 'Ferris State University', type: 'UNIVERSITY' },
     { code: 'WMU', name: 'Western Michigan University', type: 'UNIVERSITY' },
+    { code: 'SVSU', name: 'Saginaw Valley State University', type: 'UNIVERSITY' },
   ]
 
   const schools: any = {}
@@ -374,6 +375,30 @@ async function main() {
       { c: 'ACC 212', n: 'Accounting II', cr: 4 },
       { c: 'MKT 201', n: 'Marketing Principles', cr: 3 },
       { c: 'MGT 153', n: 'Principles of Management', cr: 3 },
+    ] },
+    // SVSU Transfer Agreements (from real transfer guides)
+    // Macomb → SVSU Computer Information Systems
+    { o: 'Macomb', t: 'SVSU', m: 'CS', r: 'GPA >= 2.0', a: 2.0, c: [
+      { c: 'COMI 160', n: 'Intro to Computer Information Systems', cr: 3 },
+      { c: 'COMS 171', n: 'Introduction to C++', cr: 4 },
+      { c: 'COMS 280', n: 'Advanced Programming in C++', cr: 4 },
+      { c: 'MATH 150', n: 'Probability & Statistics', cr: 4 },
+      { c: 'ACCT 201', n: 'Principles of Accounting I', cr: 4 },
+      { c: 'ECON 221', n: 'Principles of Economics (Macro)', cr: 4 },
+      { c: 'ENGL 102', n: 'Composition II', cr: 3 },
+      { c: 'BUSN 261', n: 'Business Law I', cr: 3 },
+    ] },
+    // Macomb → SVSU Business Administration
+    { o: 'Macomb', t: 'SVSU', m: 'BUS', r: 'GPA >= 2.0', a: 2.0, c: [
+      { c: 'ACCT 201', n: 'Principles of Accounting I', cr: 4 },
+      { c: 'ACCT 202', n: 'Principles of Accounting II', cr: 4 },
+      { c: 'COMI 160', n: 'Intro to Computer Information Systems', cr: 3 },
+      { c: 'COMS 171', n: 'Intro to Programming', cr: 4 },
+      { c: 'MATH 150', n: 'Statistics', cr: 4 },
+      { c: 'ECON 221', n: 'Principles of Macroeconomics', cr: 4 },
+      { c: 'ECON 222', n: 'Principles of Microeconomics', cr: 4 },
+      { c: 'BUSN 261', n: 'Business Law I', cr: 3 },
+      { c: 'ENGL 102', n: 'Composition II', cr: 3 },
     ] },
   ]
 
