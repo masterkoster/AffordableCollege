@@ -27,10 +27,68 @@ export const COLLEGES: Record<string, string> = {
 // Major code to name mapping
 export const MAJORS: Record<string, string> = {
   'CS': 'Computer Science',
+  'ComputerScience': 'Computer Science',
   'ENG': 'Engineering',
   'BUS': 'Business Administration',
   'BIO': 'Biology',
   'NUR': 'Nursing',
+}
+
+// Fallback course names for common courses
+function getCourseName(prefix: string, number: string): string {
+  const names: Record<string, Record<string, string>> = {
+    'MATH': {
+      '1760': 'Calculus I',
+      '1770': 'Calculus II',
+      '2000': 'Linear Algebra',
+      '2200': 'Discrete Structures',
+      '1554': 'Calculus I',
+      '1555': 'Calculus II',
+      '2775': 'Introduction to Linear Algebra',
+    },
+    'ITCS': {
+      '1140': 'Problem Solving & Programming',
+      '1170': 'Object-Oriented Programming',
+      '2250': 'Data Structures',
+      '2530': 'Computer Systems',
+      '2590': 'Computer Architecture',
+    },
+    'ITOS': {
+      '1710': 'Operating Systems',
+      '1720': 'Networking Fundamentals',
+    },
+    'ITNT': {
+      '1500': 'Introduction to IT',
+      '2130': 'Network+',
+    },
+    'ITWP': {
+      '1100': 'Web Development',
+    },
+    'ITIA': {
+      '1310': 'Intro to Cybersecurity',
+      '2800': 'Security+',
+    },
+    'ENGL': {
+      '1181': 'Composition I',
+      '1190': 'Composition II',
+      '1210': 'Composition I',
+      '1220': 'Composition II',
+    },
+    'CHEM': {
+      '1170': 'General Chemistry I',
+    },
+    'BIO': {
+      '1700': 'General Biology',
+    },
+    'PHYS': {
+      '2220': 'Physics I',
+      '2230': 'Physics II',
+    },
+    'AUTO': {
+      '2600': 'Technical Elective',
+    },
+  }
+  return names[prefix]?.[number] || `${prefix} ${number}`
 }
 
 /**
@@ -70,10 +128,15 @@ export async function extractCoursesFromPDF(pdfPath: string): Promise<{
     // Determine major from filename
     let major = ''
     for (const key of Object.keys(MAJORS)) {
-      if (filename.includes(key.toLowerCase())) {
-        major = key
+      if (filename.includes(key.toLowerCase().replace(' ', ''))) {
+        major = key.length === 2 ? key : 'CS' // If it's a full name, map to code
         break
       }
+    }
+    
+    // Also check for Computer Science specifically
+    if (!major && filename.includes('computer')) {
+      major = 'CS'
     }
     
     if (!major) {
@@ -81,33 +144,36 @@ export async function extractCoursesFromPDF(pdfPath: string): Promise<{
       return null
     }
     
-    // Extract courses - look for patterns like "MATH 155" or "CS 100" in the text
+    // Extract courses - look for patterns like "MATH 1760" (MCC courses) in the text
     const courses: Array<{ code: string; name: string; credits: number }> = []
     const seen = new Set<string>()
     
-    // Pattern for course codes followed by course names
-    const coursePattern = /([A-Z]{2,4})\s*(\d{3}[A-Z]?)\s+([A-Za-z][A-Za-z\s,]+?)(?:[\s(]*(?:(\d+)\s*(?:credit|hr|unit)s?|\d+\s*(?:credits?|hrs?)))?/gi
+    // Pattern for MCC course codes (left side of table shows OU, right shows MCC)
+    // Match patterns like "MATH 1760" or "ITCS 1140" - 3-4 letters + space + 3-4 digits
+    const coursePattern = /\b([A-Z]{3,4})\s+(\d{3,4}[A-Z]?)\b/gi
     
     let match
     while ((match = coursePattern.exec(text)) !== null) {
       const prefix = match[1].toUpperCase()
       const number = match[2]
-      const name = match[3].replace(/[\d(),]/g, '').trim()
-      const credits = match[4] ? parseInt(match[4]) : 3
+      const code = `${prefix} ${number}`
       
-      // Valid course prefixes for transfer guides
-      const validPrefixes = ['MATH', 'MTH', 'CS', 'PHY', 'PHYS', 'CHM', 'CHEM', 'BIO', 'BIOL', 
-                            'ENG', 'COM', 'SPE', 'COMM', 'ACC', 'ECO', 'BUS', 'MKT', 'MGT', 
-                            'STA', 'STAT', 'PSY', 'EGR', 'NUR']
+      // Skip if already seen
+      if (seen.has(code)) continue
       
-      if (validPrefixes.includes(prefix) && name.length > 2 && name.length < 60) {
-        const code = `${prefix} ${number}`
-        const key = `${code}-${name}`
-        
-        if (!seen.has(key)) {
-          seen.add(key)
-          courses.push({ code, name, credits })
-        }
+      // Valid MCC course prefixes
+      const validPrefixes = ['MATH', 'MTH', 'CS', 'ITCS', 'ITOS', 'ITNT', 'ITWP', 'ITIA', 
+                           'PHY', 'PHYS', 'CHEM', 'CHM', 'BIO', 'BIOL', 'ENGL', 'ENG',
+                           'COM', 'SPE', 'COMM', 'ACC', 'ECO', 'BUS', 'MKT', 'MGT', 
+                           'STAT', 'PSY', 'AUTO']
+      
+      if (validPrefixes.includes(prefix)) {
+        seen.add(code)
+        courses.push({ 
+          code, 
+          name: getCourseName(prefix, number),
+          credits: 3 
+        })
       }
     }
     
