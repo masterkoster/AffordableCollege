@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -20,7 +20,7 @@ interface TransferGuideData {
   totalCredits: number | null
   catalogUrl: string | null
   courses: Course[]
-  originSchool: { name: string }
+  originSchool: { id: string; name: string }
   targetSchool: { 
     name: string
     code: string
@@ -65,35 +65,10 @@ export default function TransferGuideClient({
   const router = useRouter()
   
   // Calculate costs and transfer stats
-  const calculateStats = (guideData: TransferGuideData | CompareGuideData, originTuition = 135) => {
-    const totalCredits = guideData.courses.reduce((sum, c) => sum + c.credits, 0)
-    const ccCost = totalCredits * originTuition
-    const uniCost = totalCredits * (guideData.targetSchool.inStatePerCredit ?? 500)
-    const remainingCredits = (guideData.totalCredits ?? 128) - totalCredits
-    const remainingCost = remainingCredits * (guideData.targetSchool.inStatePerCredit ?? 500)
-    
-    // Time to graduate estimation
-    const ccCreditsPerSemester = 15 // typical CC load
-    const uniCreditsPerSemester = 15 // typical university load
-    const ccSemesters = Math.ceil(totalCredits / ccCreditsPerSemester)
-    const uniSemesters = Math.ceil(remainingCredits / uniCreditsPerSemester)
-    const totalYears = (ccSemesters + uniSemesters) / 2 // divide by 2 for 2 semesters/year
-    
-    return { 
-      totalCredits, 
-      ccCost, 
-      uniCost, 
-      remainingCredits, 
-      remainingCost, 
-      totalCost: ccCost + remainingCost,
-      ccSemesters,
-      uniSemesters,
-      totalYears
-    }
-  }
-  
-  const primaryStats = calculateStats(guide)
-  const compareStats = compareGuide ? calculateStats(compareGuide) : null
+  // originTuition is the tuition per credit at the community college
+  const originTuition = 135 // Default CC tuition per credit
+  const primaryStats = calculateStats(guide, originTuition)
+  const compareStats = compareGuide ? calculateStats(compareGuide, originTuition) : null
   
   const handleApply = () => {
     router.push('/signup?guideId=' + guide.id)
@@ -231,73 +206,20 @@ export default function TransferGuideClient({
         </div>
 
         {/* Comparison Section */}
-        {compareGuide && compareStats && (
-          <div className="card overflow-hidden mb-6 border-2 border-green-200">
-            <div className="px-6 py-4 bg-green-50 border-b border-green-200">
-              <h2 className="text-lg font-semibold text-slate-900">University Comparison</h2>
-            </div>
-            <div className="grid md:grid-cols-2 divide-x divide-green-200">
-              {/* Primary University */}
-              <div className="p-6">
-                <h3 className="font-bold text-slate-900 mb-4">{guide.targetSchool.name}</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Transfer Credits</span>
-                    <span className="font-semibold">{primaryStats.totalCredits}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">CC Cost (transferred)</span>
-                    <span className="font-semibold">${primaryStats.ccCost.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Remaining at University</span>
-                    <span className="font-semibold">{primaryStats.remainingCredits} credits</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Time to Graduate</span>
-                    <span className="font-semibold">{primaryStats.totalYears.toFixed(1)} years</span>
-                  </div>
-                  <div className="flex justify-between text-lg border-t pt-3">
-                    <span className="font-medium">Est. Total Cost</span>
-                    <span className="font-bold text-blue-600">${primaryStats.totalCost.toLocaleString()}</span>
-                  </div>
-                </div>
-              </div>
-              {/* Compare University */}
-              <div className="p-6">
-                <h3 className="font-bold text-slate-900 mb-4">{compareGuide.targetSchool.name}</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Transfer Credits</span>
-                    <span className="font-semibold">{compareStats.totalCredits}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">CC Cost (transferred)</span>
-                    <span className="font-semibold">${compareStats.ccCost.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Remaining at University</span>
-                    <span className="font-semibold">{compareStats.remainingCredits} credits</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-slate-600">Time to Graduate</span>
-                    <span className="font-semibold">{compareStats.totalYears.toFixed(1)} years</span>
-                  </div>
-                  <div className="flex justify-between text-lg border-t pt-3">
-                    <span className="font-medium">Est. Total Cost</span>
-                    <span className="font-bold text-green-600">${compareStats.totalCost.toLocaleString()}</span>
-                  </div>
-                </div>
-                {compareStats.totalCost < primaryStats.totalCost && (
-                  <div className="mt-4 p-3 bg-green-100 rounded-lg text-center">
-                    <p className="text-green-700 font-semibold">
-                      Save ${(primaryStats.totalCost - compareStats.totalCost).toLocaleString()}!
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+        {compareGuide && compareStats ? (
+          <ComparisonSection 
+            guide={guide} 
+            compareGuide={compareGuide}
+            primaryStats={primaryStats}
+            compareStats={compareStats}
+            originSchoolName={guide.originSchool.name}
+          />
+        ) : (
+          <ComparisonSelector 
+            guide={guide} 
+            originSchoolId={guide.originSchool.id}
+            majorId={guide.major.name}
+          />
         )}
 
         <div className="card overflow-hidden mb-6">
@@ -597,4 +519,267 @@ function CourseRow({ course }: { course: Course }) {
       </Dialog.Root>
     </>
   )
+}
+
+// Comparison selector component - shown when no comparison is selected
+function ComparisonSelector({ 
+  guide, 
+  originSchoolId, 
+  majorId 
+}: { 
+  guide: TransferGuideData
+  originSchoolId: string
+  majorId: string 
+}) {
+  const router = useRouter()
+  const [selectedCompareId, setSelectedCompareId] = useState('')
+  
+  // This would be passed from the server in a real implementation
+  // For now, we'll redirect to a comparison page
+  const handleCompare = () => {
+    if (selectedCompareId) {
+      router.push(`/find-transfer/${originSchoolId}/${selectedCompareId}/${majorId}?compare=${guide.id}`)
+    }
+  }
+  
+  return (
+    <div className="card p-6 mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
+      <div className="flex items-start gap-4">
+        <div className="flex-1">
+          <h2 className="text-lg font-semibold text-slate-900 mb-2">Compare Universities</h2>
+          <p className="text-sm text-slate-600 mb-4">
+            See how {guide.targetSchool.name} compares to other universities
+          </p>
+          <div className="flex gap-3">
+            <select
+              value={selectedCompareId}
+              onChange={(e) => setSelectedCompareId(e.target.value)}
+              className="input-field flex-1"
+            >
+              <option value="">Select university to compare...</option>
+              <option value="wsu">Wayne State University</option>
+              <option value="emu">Eastern Michigan University</option>
+              <option value="gvsu">Grand Valley State University</option>
+              <option value="fsu">Ferris State University</option>
+              <option value="wmu">Western Michigan University</option>
+              <option value="svsu">Saginaw Valley State University</option>
+            </select>
+            <button 
+              onClick={handleCompare}
+              disabled={!selectedCompareId}
+              className="btn-primary whitespace-nowrap"
+            >
+              Compare
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// Comparison section with stats, graph, and per-credit costs
+function ComparisonSection({
+  guide,
+  compareGuide,
+  primaryStats,
+  compareStats,
+  originSchoolName
+}: {
+  guide: TransferGuideData
+  compareGuide: CompareGuideData
+  primaryStats: any
+  compareStats: any
+  originSchoolName: string
+}) {
+  const maxCost = Math.max(primaryStats.totalCost, compareStats.totalCost)
+  const maxYears = Math.max(primaryStats.totalYears, compareStats.totalYears)
+  
+  return (
+    <div className="space-y-6 mb-6">
+      {/* Header */}
+      <div className="card p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200">
+        <h2 className="text-xl font-bold text-slate-900 mb-4">University Comparison</h2>
+        
+        {/* Per Credit Costs */}
+        <div className="grid md:grid-cols-3 gap-4 mb-6">
+          <div className="bg-white p-4 rounded-lg border">
+            <p className="text-sm text-slate-500 mb-1">{originSchoolName}</p>
+            <p className="text-2xl font-bold text-slate-900">${primaryStats.originTuition}</p>
+            <p className="text-xs text-slate-400">per credit</p>
+          </div>
+          <div className="bg-white p-4 rounded-lg border border-blue-200">
+            <p className="text-sm text-slate-500 mb-1">{guide.targetSchool.name}</p>
+            <p className="text-2xl font-bold text-blue-600">${primaryStats.uniTuition}</p>
+            <p className="text-xs text-slate-400">per credit</p>
+          </div>
+          <div className="bg-white p-4 rounded-lg border border-green-200">
+            <p className="text-sm text-slate-500 mb-1">{compareGuide.targetSchool.name}</p>
+            <p className="text-2xl font-bold text-green-600">${compareStats.uniTuition}</p>
+            <p className="text-xs text-slate-400">per credit</p>
+          </div>
+        </div>
+        
+        {/* Comparison Bar Chart */}
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold text-slate-700 mb-3">Total Cost Comparison</h3>
+          <div className="space-y-4">
+            {/* Primary University Bar */}
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="font-medium">{guide.targetSchool.name}</span>
+                <span className="font-bold text-blue-600">${primaryStats.totalCost.toLocaleString()}</span>
+              </div>
+              <div className="w-full bg-slate-200 rounded-full h-6 overflow-hidden">
+                <div 
+                  className="bg-blue-500 h-6 rounded-full flex items-center justify-end pr-2 text-white text-xs font-medium"
+                  style={{ width: `${(primaryStats.totalCost / maxCost) * 100}%` }}
+                >
+                  {((primaryStats.totalCost / maxCost) * 100).toFixed(0)}%
+                </div>
+              </div>
+            </div>
+            {/* Compare University Bar */}
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="font-medium">{compareGuide.targetSchool.name}</span>
+                <span className="font-bold text-green-600">${compareStats.totalCost.toLocaleString()}</span>
+              </div>
+              <div className="w-full bg-slate-200 rounded-full h-6 overflow-hidden">
+                <div 
+                  className="bg-green-500 h-6 rounded-full flex items-center justify-end pr-2 text-white text-xs font-medium"
+                  style={{ width: `${(compareStats.totalCost / maxCost) * 100}%` }}
+                >
+                  {((compareStats.totalCost / maxCost) * 100).toFixed(0)}%
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Time to Graduate Bar Chart */}
+        <div className="mb-6">
+          <h3 className="text-sm font-semibold text-slate-700 mb-3">Time to Graduate</h3>
+          <div className="space-y-4">
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="font-medium">{guide.targetSchool.name}</span>
+                <span className="font-bold text-slate-700">{primaryStats.totalYears.toFixed(1)} years</span>
+              </div>
+              <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
+                <div 
+                  className="bg-blue-500 h-4 rounded-full"
+                  style={{ width: `${(primaryStats.totalYears / maxYears) * 100}%` }}
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex justify-between text-sm mb-1">
+                <span className="font-medium">{compareGuide.targetSchool.name}</span>
+                <span className="font-bold text-slate-700">{compareStats.totalYears.toFixed(1)} years</span>
+              </div>
+              <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
+                <div 
+                  className="bg-green-500 h-4 rounded-full"
+                  style={{ width: `${(compareStats.totalYears / maxYears) * 100}%` }}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Detailed Stats Table */}
+        <div className="overflow-hidden rounded-lg border border-green-200">
+          <table className="w-full text-sm">
+            <thead className="bg-green-100">
+              <tr>
+                <th className="px-4 py-2 text-left font-semibold text-slate-700">Metric</th>
+                <th className="px-4 py-2 text-right font-semibold text-blue-700">{guide.targetSchool.name}</th>
+                <th className="px-4 py-2 text-right font-semibold text-green-700">{compareGuide.targetSchool.name}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-t border-green-200">
+                <td className="px-4 py-2 text-slate-600">Transfer Credits</td>
+                <td className="px-4 py-2 text-right font-medium">{primaryStats.totalCredits}</td>
+                <td className="px-4 py-2 text-right font-medium">{compareStats.totalCredits}</td>
+              </tr>
+              <tr className="border-t border-green-200 bg-green-50/50">
+                <td className="px-4 py-2 text-slate-600">CC Cost (transferred)</td>
+                <td className="px-4 py-2 text-right font-medium">${primaryStats.ccCost.toLocaleString()}</td>
+                <td className="px-4 py-2 text-right font-medium">${compareStats.ccCost.toLocaleString()}</td>
+              </tr>
+              <tr className="border-t border-green-200">
+                <td className="px-4 py-2 text-slate-600">Remaining at University</td>
+                <td className="px-4 py-2 text-right font-medium">{primaryStats.remainingCredits} credits</td>
+                <td className="px-4 py-2 text-right font-medium">{compareStats.remainingCredits} credits</td>
+              </tr>
+              <tr className="border-t border-green-200 bg-green-50/50">
+                <td className="px-4 py-2 text-slate-600">University Cost</td>
+                <td className="px-4 py-2 text-right font-medium">${(primaryStats.uniCost + primaryStats.remainingCost).toLocaleString()}</td>
+                <td className="px-4 py-2 text-right font-medium">${(compareStats.uniCost + compareStats.remainingCost).toLocaleString()}</td>
+              </tr>
+              <tr className="border-t border-green-200">
+                <td className="px-4 py-2 text-slate-600">Time to Graduate</td>
+                <td className="px-4 py-2 text-right font-medium">{primaryStats.totalYears.toFixed(1)} years</td>
+                <td className="px-4 py-2 text-right font-medium">{compareStats.totalYears.toFixed(1)} years</td>
+              </tr>
+              <tr className="border-t border-green-200 bg-green-100">
+                <td className="px-4 py-2 text-slate-700 font-semibold">Est. Total Cost</td>
+                <td className="px-4 py-2 text-right font-bold text-blue-700">${primaryStats.totalCost.toLocaleString()}</td>
+                <td className="px-4 py-2 text-right font-bold text-green-700">${compareStats.totalCost.toLocaleString()}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        {/* Savings Highlight */}
+        {compareStats.totalCost < primaryStats.totalCost && (
+          <div className="mt-4 p-4 bg-green-100 rounded-lg text-center">
+            <p className="text-green-700 font-bold text-lg">
+              Save ${(primaryStats.totalCost - compareStats.totalCost).toLocaleString()} by choosing {compareGuide.targetSchool.name}!
+            </p>
+          </div>
+        )}
+        {primaryStats.totalCost < compareStats.totalCost && (
+          <div className="mt-4 p-4 bg-blue-100 rounded-lg text-center">
+            <p className="text-blue-700 font-bold text-lg">
+              Save ${(compareStats.totalCost - primaryStats.totalCost).toLocaleString()} by choosing {guide.targetSchool.name}!
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
+// Helper function for calculating stats (needs to be before components)
+function calculateStats(guideData: TransferGuideData | CompareGuideData, originTuition: number) {
+  const totalCredits = guideData.courses.reduce((sum, c) => sum + c.credits, 0)
+  const ccCost = totalCredits * originTuition
+  const uniTuition = guideData.targetSchool.inStatePerCredit ?? 500
+  const uniCost = totalCredits * uniTuition
+  const remainingCredits = (guideData.totalCredits ?? 128) - totalCredits
+  const remainingCost = remainingCredits * uniTuition
+  
+  // Time to graduate estimation: 14 credits/semester, 2 semesters/year
+  const creditsPerSemester = 14
+  const semestersPerYear = 2
+  const ccSemesters = Math.ceil(totalCredits / creditsPerSemester)
+  const uniSemesters = Math.ceil(remainingCredits / creditsPerSemester)
+  const totalYears = (ccSemesters + uniSemesters) / semestersPerYear
+  
+  return { 
+    totalCredits, 
+    ccCost, 
+    uniCost,
+    uniTuition,
+    originTuition,
+    remainingCredits, 
+    remainingCost, 
+    totalCost: ccCost + remainingCost,
+    ccSemesters,
+    uniSemesters,
+    totalYears
+  }
 }

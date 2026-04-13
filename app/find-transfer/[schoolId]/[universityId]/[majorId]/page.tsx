@@ -79,7 +79,7 @@ export default async function TransferGuideDetailPage({
     totalCredits: guide.totalCredits,
     catalogUrl: guide.catalogUrl,
     courses,
-    originSchool: { name: guide.originSchool.name },
+    originSchool: { id: guide.originSchoolId, name: guide.originSchool.name },
     targetSchool: { 
       name: guide.targetSchool.name,
       code: guide.targetSchool.code,
