@@ -25,13 +25,13 @@ async function main() {
   // Note: Michigan public universities charge in-state rates to all students (no separate out-of-state)
   // International students pay higher rates
   const univ = [
-    { code: 'OU', name: 'Oakland University', type: 'UNIVERSITY', inStatePerCredit: 552.50, outStatePerCredit: 795.75, internationalPerCredit: 795.75 },
-    { code: 'WSU', name: 'Wayne State University', type: 'UNIVERSITY', inStatePerCredit: 567.27, outStatePerCredit: 1299.29, internationalPerCredit: 1299.29 },
-    { code: 'EMU', name: 'Eastern Michigan University', type: 'UNIVERSITY', inStatePerCredit: 700.00, outStatePerCredit: 700.00, internationalPerCredit: 700.00 },
-    { code: 'GVSU', name: 'Grand Valley State University', type: 'UNIVERSITY', inStatePerCredit: 665.00, outStatePerCredit: 947.00, internationalPerCredit: 947.00 },
-    { code: 'FSU', name: 'Ferris State University', type: 'UNIVERSITY', inStatePerCredit: 515.00, outStatePerCredit: 515.00, internationalPerCredit: 853.00 },
-    { code: 'WMU', name: 'Western Michigan University', type: 'UNIVERSITY', inStatePerCredit: 658.92, outStatePerCredit: 823.65, internationalPerCredit: 823.65 },
-    { code: 'SVSU', name: 'Saginaw Valley State University', type: 'UNIVERSITY', inStatePerCredit: 570.00, outStatePerCredit: 570.00, internationalPerCredit: 570.00 },
+    { code: 'OU', name: 'Oakland University', type: 'UNIVERSITY', inStatePerCredit: 552.50, outStatePerCredit: 795.75, internationalPerCredit: 795.75, ranking: 298, totalStudents: 16000, acceptanceRate: 78, description: 'Public research university in Rochester, Michigan known for engineering, business, and health sciences programs.' },
+    { code: 'WSU', name: 'Wayne State University', type: 'UNIVERSITY', inStatePerCredit: 567.27, outStatePerCredit: 1299.29, internationalPerCredit: 1299.29, ranking: 205, totalStudents: 24000, acceptanceRate: 70, description: 'Urban research university in Detroit with strong programs in medicine, engineering, and business.' },
+    { code: 'EMU', name: 'Eastern Michigan University', type: 'UNIVERSITY', inStatePerCredit: 700.00, outStatePerCredit: 700.00, internationalPerCredit: 700.00, ranking: 280, totalStudents: 14000, acceptanceRate: 74, description: 'Public university in Ypsilanti known for education, business, and health programs.' },
+    { code: 'GVSU', name: 'Grand Valley State University', type: 'UNIVERSITY', inStatePerCredit: 665.00, outStatePerCredit: 947.00, internationalPerCredit: 947.00, ranking: 180, totalStudents: 23000, acceptanceRate: 92, description: 'Top-ranked public university in Allendale, Michigan with strong liberal arts and professional programs.' },
+    { code: 'FSU', name: 'Ferris State University', type: 'UNIVERSITY', inStatePerCredit: 515.00, outStatePerCredit: 515.00, internationalPerCredit: 853.00, ranking: 250, totalStudents: 10000, acceptanceRate: 84, description: 'Career-focused university in Big Rapids, known for health sciences, engineering, and technology programs.' },
+    { code: 'WMU', name: 'Western Michigan University', type: 'UNIVERSITY', inStatePerCredit: 658.92, outStatePerCredit: 823.65, internationalPerCredit: 823.65, ranking: 230, totalStudents: 19000, acceptanceRate: 79, description: 'Large research university in Kalamazoo with diverse programs and strong aviation, engineering, and business schools.' },
+    { code: 'SVSU', name: 'Saginaw Valley State University', type: 'UNIVERSITY', inStatePerCredit: 570.00, outStatePerCredit: 570.00, internationalPerCredit: 570.00, ranking: 80, totalStudents: 8000, acceptanceRate: 92, description: 'Affordable public university in University Center with strong nursing, business, and engineering programs.' },
   ]
 
   const schools: any = {}

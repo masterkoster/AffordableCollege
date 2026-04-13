@@ -36,6 +36,12 @@ model School {
   outStatePerCredit     Float? // Out-of-state tuition per credit  
   internationalPerCredit Float? // International student tuition per credit
   
+  // University stats (only for universities)
+  ranking              Int?    // National ranking (e.g., 100)
+  totalStudents        Int?    // Total enrollment
+  acceptanceRate       Float?  // Acceptance rate as percentage (e.g., 75.5)
+  description          String? // Short description of the university
+  
   origins  TransferGuide[] @relation("OriginSchool")
   targets  TransferGuide[] @relation("TargetSchool")
 }

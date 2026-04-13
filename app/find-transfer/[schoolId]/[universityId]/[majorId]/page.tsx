@@ -83,6 +83,61 @@ export default async function TransferGuideDetailPage({
           </p>
         </div>
 
+        {/* University Info Widget */}
+        <div className="card p-6 mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+          <div className="flex items-start gap-4">
+            {/* University Icon */}
+            <div className="w-16 h-16 rounded-xl bg-white shadow-sm flex items-center justify-center flex-shrink-0">
+              <span className="text-2xl font-bold text-blue-600">
+                {guide.targetSchool.name.split(' ').map(w => w[0]).join('').slice(0,2)}
+              </span>
+            </div>
+            
+            <div className="flex-1">
+              <h2 className="text-xl font-bold text-slate-900 mb-1">
+                {guide.targetSchool.name}
+              </h2>
+              {guide.targetSchool.description && (
+                <p className="text-sm text-slate-600 mb-3">
+                  {guide.targetSchool.description}
+                </p>
+              )}
+              
+              {/* Stats Grid */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {guide.targetSchool.ranking && (
+                  <div className="bg-white/60 rounded-lg p-2 text-center">
+                    <p className="text-xs text-slate-500">National Ranking</p>
+                    <p className="text-lg font-bold text-slate-900">#{guide.targetSchool.ranking}</p>
+                  </div>
+                )}
+                {guide.targetSchool.totalStudents && (
+                  <div className="bg-white/60 rounded-lg p-2 text-center">
+                    <p className="text-xs text-slate-500">Students</p>
+                    <p className="text-lg font-bold text-slate-900">
+                      {guide.targetSchool.totalStudents >= 1000 
+                        ? `${(guide.targetSchool.totalStudents / 1000).toFixed(1)}K`
+                        : guide.targetSchool.totalStudents}
+                    </p>
+                  </div>
+                )}
+                {guide.targetSchool.acceptanceRate && (
+                  <div className="bg-white/60 rounded-lg p-2 text-center">
+                    <p className="text-xs text-slate-500">Acceptance</p>
+                    <p className="text-lg font-bold text-emerald-600">{guide.targetSchool.acceptanceRate}%</p>
+                  </div>
+                )}
+                {guide.targetSchool.inStatePerCredit && (
+                  <div className="bg-white/60 rounded-lg p-2 text-center">
+                    <p className="text-xs text-slate-500">Per Credit</p>
+                    <p className="text-lg font-bold text-blue-600">${Math.round(guide.targetSchool.inStatePerCredit)}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="card p-6 mb-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Requirements</h2>
           <div className="grid md:grid-cols-2 gap-6">
