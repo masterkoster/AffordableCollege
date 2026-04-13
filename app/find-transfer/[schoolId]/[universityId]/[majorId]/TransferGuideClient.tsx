@@ -553,6 +553,15 @@ function ComparisonSelector({
     }
   }
   
+  // Also navigate immediately when dropdown selection changes
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value
+    setSelectedCompareId(value)
+    if (value) {
+      router.push(`/find-transfer/${originSchoolId}/${value}/${majorId}?compareWith=${guide.targetSchool.code}`)
+    }
+  }
+  
   // Don't show the comparison section if there are no other universities to compare
   if (availableUniversities.length === 0) {
     return null
@@ -569,7 +578,13 @@ function ComparisonSelector({
           <div className="flex gap-3">
             <select
               value={selectedCompareId}
-              onChange={(e) => setSelectedCompareId(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value
+                setSelectedCompareId(value)
+                if (value) {
+                  router.push(`/find-transfer/${originSchoolId}/${value}/${majorId}?compareWith=${guide.targetSchool.code}`)
+                }
+              }}
               className="input-field flex-1"
             >
               <option value="">Select university to compare...</option>
@@ -577,13 +592,6 @@ function ComparisonSelector({
                 <option key={uni.id} value={uni.id}>{uni.name}</option>
               ))}
             </select>
-            <button 
-              onClick={handleCompare}
-              disabled={!selectedCompareId}
-              className="btn-primary whitespace-nowrap"
-            >
-              Compare
-            </button>
           </div>
         </div>
       </div>
