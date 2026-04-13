@@ -41,6 +41,7 @@ model School {
   totalStudents        Int?    // Total enrollment
   acceptanceRate       Float?  // Acceptance rate as percentage (e.g., 75.5)
   description          String? // Short description of the university
+  logoUrl             String?  // Path to logo in public/logos folder
   
   origins  TransferGuide[] @relation("OriginSchool")
   targets  TransferGuide[] @relation("TargetSchool")

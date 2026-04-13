@@ -86,11 +86,24 @@ export default async function TransferGuideDetailPage({
         {/* University Info Widget */}
         <div className="card p-6 mb-6 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
           <div className="flex items-start gap-4">
-            {/* University Icon */}
-            <div className="w-16 h-16 rounded-xl bg-white shadow-sm flex items-center justify-center flex-shrink-0">
-              <span className="text-2xl font-bold text-blue-600">
-                {guide.targetSchool.name.split(' ').map(w => w[0]).join('').slice(0,2)}
-              </span>
+            {/* University Logo */}
+            <div className="w-20 h-20 rounded-xl bg-white shadow-sm flex items-center justify-center flex-shrink-0 p-2">
+              <img 
+                src={`/logos/${guide.targetSchool.code.toLowerCase()}.png`} 
+                alt={`${guide.targetSchool.name} logo`}
+                className="max-w-full max-h-full object-contain"
+                onError={(e) => {
+                  // Fallback to initials if logo doesn't exist
+                  e.currentTarget.style.display = 'none'
+                  const parent = e.currentTarget.parentElement
+                  if (parent) {
+                    const fallback = document.createElement('span')
+                    fallback.className = 'text-2xl font-bold text-blue-600'
+                    fallback.textContent = guide.targetSchool.name.split(' ').map(w => w[0]).join('').slice(0,2)
+                    parent.appendChild(fallback)
+                  }
+                }}
+              />
             </div>
             
             <div className="flex-1">
