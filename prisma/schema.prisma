@@ -31,6 +31,11 @@ model School {
   code     String @unique // "OCC", "Macomb", "Oakland Univ"
   type     String // "CC" or "UNIVERSITY"
   
+  // Tuition costs per credit hour (2025-2026 academic year)
+  inStatePerCredit      Float? // In-state tuition per credit
+  outStatePerCredit     Float? // Out-of-state tuition per credit  
+  internationalPerCredit Float? // International student tuition per credit
+  
   origins  TransferGuide[] @relation("OriginSchool")
   targets  TransferGuide[] @relation("TargetSchool")
 }

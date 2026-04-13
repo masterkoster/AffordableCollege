@@ -13,23 +13,25 @@ async function main() {
     create: { email: 'admin@affordablecollege.edu', password: hashedPassword, name: 'Admin', role: 'ADMIN' }
   })
 
-  // Community Colleges
+  // Community Colleges with tuition costs per credit hour (2025-2026)
   const cc = [
-    { code: 'OCC', name: 'Oakland Community College', type: 'CC' },
-    { code: 'Macomb', name: 'Macomb Community College', type: 'CC' },
-    { code: 'Schoolcraft', name: 'Schoolcraft College', type: 'CC' },
-    { code: 'HenryFord', name: 'Henry Ford College', type: 'CC' },
+    { code: 'OCC', name: 'Oakland Community College', type: 'CC', inStatePerCredit: 211, outStatePerCredit: 211, internationalPerCredit: 211 },
+    { code: 'Macomb', name: 'Macomb Community College', type: 'CC', inStatePerCredit: 113, outStatePerCredit: 270, internationalPerCredit: 270 },
+    { code: 'Schoolcraft', name: 'Schoolcraft College', type: 'CC', inStatePerCredit: 250, outStatePerCredit: 250, internationalPerCredit: 250 },
+    { code: 'HenryFord', name: 'Henry Ford College', type: 'CC', inStatePerCredit: 135, outStatePerCredit: 270, internationalPerCredit: 270 },
   ]
 
-  // Universities
+  // Universities with tuition costs per credit hour (2025-2026 academic year)
+  // Note: Michigan public universities charge in-state rates to all students (no separate out-of-state)
+  // International students pay higher rates
   const univ = [
-    { code: 'OU', name: 'Oakland University', type: 'UNIVERSITY' },
-    { code: 'WSU', name: 'Wayne State University', type: 'UNIVERSITY' },
-    { code: 'EMU', name: 'Eastern Michigan University', type: 'UNIVERSITY' },
-    { code: 'GVSU', name: 'Grand Valley State University', type: 'UNIVERSITY' },
-    { code: 'FSU', name: 'Ferris State University', type: 'UNIVERSITY' },
-    { code: 'WMU', name: 'Western Michigan University', type: 'UNIVERSITY' },
-    { code: 'SVSU', name: 'Saginaw Valley State University', type: 'UNIVERSITY' },
+    { code: 'OU', name: 'Oakland University', type: 'UNIVERSITY', inStatePerCredit: 552.50, outStatePerCredit: 795.75, internationalPerCredit: 795.75 },
+    { code: 'WSU', name: 'Wayne State University', type: 'UNIVERSITY', inStatePerCredit: 567.27, outStatePerCredit: 1299.29, internationalPerCredit: 1299.29 },
+    { code: 'EMU', name: 'Eastern Michigan University', type: 'UNIVERSITY', inStatePerCredit: 700.00, outStatePerCredit: 700.00, internationalPerCredit: 700.00 },
+    { code: 'GVSU', name: 'Grand Valley State University', type: 'UNIVERSITY', inStatePerCredit: 665.00, outStatePerCredit: 947.00, internationalPerCredit: 947.00 },
+    { code: 'FSU', name: 'Ferris State University', type: 'UNIVERSITY', inStatePerCredit: 515.00, outStatePerCredit: 515.00, internationalPerCredit: 853.00 },
+    { code: 'WMU', name: 'Western Michigan University', type: 'UNIVERSITY', inStatePerCredit: 658.92, outStatePerCredit: 823.65, internationalPerCredit: 823.65 },
+    { code: 'SVSU', name: 'Saginaw Valley State University', type: 'UNIVERSITY', inStatePerCredit: 570.00, outStatePerCredit: 570.00, internationalPerCredit: 570.00 },
   ]
 
   const schools: any = {}
