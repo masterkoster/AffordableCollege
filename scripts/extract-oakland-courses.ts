@@ -255,18 +255,28 @@ export async function extractCoursesFromPDF(pdfPath: string): Promise<{
       return null
     }
     
-    // Determine major from filename
+    // Determine major from filename - check more specific patterns first
     let major = ''
-    for (const key of Object.keys(MAJORS)) {
-      if (filename.includes(key.toLowerCase().replace(' ', ''))) {
-        major = key.length === 2 ? key : 'CS' // If it's a full name, map to code
-        break
-      }
+    
+    // Check for exact major names first (longer = more specific)
+    const majorPatterns: Record<string, string> = {
+      'computer': 'CS',
+      'business': 'BUS', 
+      'biology': 'BIO',
+      'nursing': 'NUR',
+      'mechanical': 'ENG',
+      'electrical': 'ENG',
+      'computerengineering': 'ENG',
+      'bioengineering': 'ENG',
+      'engineering': 'ENG',
     }
     
-    // Also check for Computer Science specifically
-    if (!major && filename.includes('computer')) {
-      major = 'CS'
+    const lowerFilename = filename.toLowerCase()
+    for (const [pattern, majorCode] of Object.entries(majorPatterns)) {
+      if (lowerFilename.includes(pattern)) {
+        major = majorCode
+        break
+      }
     }
     
     // If major not detected from filename, detect from course content
