@@ -15,23 +15,23 @@ async function main() {
 
   // Community Colleges with tuition costs per credit hour (2025-2026)
   const cc = [
-    { code: 'OCC', name: 'Oakland Community College', type: 'CC', inStatePerCredit: 211, outStatePerCredit: 211, internationalPerCredit: 211 },
-    { code: 'Macomb', name: 'Macomb Community College', type: 'CC', inStatePerCredit: 113, outStatePerCredit: 270, internationalPerCredit: 270 },
-    { code: 'Schoolcraft', name: 'Schoolcraft College', type: 'CC', inStatePerCredit: 250, outStatePerCredit: 250, internationalPerCredit: 250 },
-    { code: 'HenryFord', name: 'Henry Ford College', type: 'CC', inStatePerCredit: 135, outStatePerCredit: 270, internationalPerCredit: 270 },
+    { code: 'OCC', name: 'Oakland Community College', type: 'CC', inStatePerCredit: 211, outStatePerCredit: 211, internationalPerCredit: 211, avgTimeToGraduate: 2.5 },
+    { code: 'Macomb', name: 'Macomb Community College', type: 'CC', inStatePerCredit: 113, outStatePerCredit: 270, internationalPerCredit: 270, avgTimeToGraduate: 2.5 },
+    { code: 'Schoolcraft', name: 'Schoolcraft College', type: 'CC', inStatePerCredit: 250, outStatePerCredit: 250, internationalPerCredit: 250, avgTimeToGraduate: 2.5 },
+    { code: 'HenryFord', name: 'Henry Ford College', type: 'CC', inStatePerCredit: 135, outStatePerCredit: 270, internationalPerCredit: 270, avgTimeToGraduate: 2.5 },
   ]
 
   // Universities with tuition costs per credit hour (2025-2026 academic year)
   // Note: Michigan public universities charge in-state rates to all students (no separate out-of-state)
   // International students pay higher rates
   const univ = [
-    { code: 'OU', name: 'Oakland University', type: 'UNIVERSITY', inStatePerCredit: 552.50, outStatePerCredit: 795.75, internationalPerCredit: 795.75, ranking: 298, totalStudents: 16000, acceptanceRate: 78, description: 'Public research university in Rochester, Michigan known for engineering, business, and health sciences programs.' },
-    { code: 'WSU', name: 'Wayne State University', type: 'UNIVERSITY', inStatePerCredit: 567.27, outStatePerCredit: 1299.29, internationalPerCredit: 1299.29, ranking: 205, totalStudents: 24000, acceptanceRate: 70, description: 'Urban research university in Detroit with strong programs in medicine, engineering, and business.' },
-    { code: 'EMU', name: 'Eastern Michigan University', type: 'UNIVERSITY', inStatePerCredit: 700.00, outStatePerCredit: 700.00, internationalPerCredit: 700.00, ranking: 280, totalStudents: 14000, acceptanceRate: 74, description: 'Public university in Ypsilanti known for education, business, and health programs.' },
-    { code: 'GVSU', name: 'Grand Valley State University', type: 'UNIVERSITY', inStatePerCredit: 665.00, outStatePerCredit: 947.00, internationalPerCredit: 947.00, ranking: 180, totalStudents: 23000, acceptanceRate: 92, description: 'Top-ranked public university in Allendale, Michigan with strong liberal arts and professional programs.' },
-    { code: 'FSU', name: 'Ferris State University', type: 'UNIVERSITY', inStatePerCredit: 515.00, outStatePerCredit: 515.00, internationalPerCredit: 853.00, ranking: 250, totalStudents: 10000, acceptanceRate: 84, description: 'Career-focused university in Big Rapids, known for health sciences, engineering, and technology programs.' },
-    { code: 'WMU', name: 'Western Michigan University', type: 'UNIVERSITY', inStatePerCredit: 658.92, outStatePerCredit: 823.65, internationalPerCredit: 823.65, ranking: 230, totalStudents: 19000, acceptanceRate: 79, description: 'Large research university in Kalamazoo with diverse programs and strong aviation, engineering, and business schools.' },
-    { code: 'SVSU', name: 'Saginaw Valley State University', type: 'UNIVERSITY', inStatePerCredit: 570.00, outStatePerCredit: 570.00, internationalPerCredit: 570.00, ranking: 80, totalStudents: 8000, acceptanceRate: 92, description: 'Affordable public university in University Center with strong nursing, business, and engineering programs.' },
+    { code: 'OU', name: 'Oakland University', type: 'UNIVERSITY', inStatePerCredit: 552.50, outStatePerCredit: 795.75, internationalPerCredit: 795.75, ranking: 298, totalStudents: 16000, acceptanceRate: 78, description: 'Public research university in Rochester, Michigan known for engineering, business, and health sciences programs.', avgTimeToGraduate: 2.0 },
+    { code: 'WSU', name: 'Wayne State University', type: 'UNIVERSITY', inStatePerCredit: 567.27, outStatePerCredit: 1299.29, internationalPerCredit: 1299.29, ranking: 205, totalStudents: 24000, acceptanceRate: 70, description: 'Urban research university in Detroit with strong programs in medicine, engineering, and business.', avgTimeToGraduate: 2.0 },
+    { code: 'EMU', name: 'Eastern Michigan University', type: 'UNIVERSITY', inStatePerCredit: 700.00, outStatePerCredit: 700.00, internationalPerCredit: 700.00, ranking: 280, totalStudents: 14000, acceptanceRate: 74, description: 'Public university in Ypsilanti known for education, business, and health programs.', avgTimeToGraduate: 2.0 },
+    { code: 'GVSU', name: 'Grand Valley State University', type: 'UNIVERSITY', inStatePerCredit: 665.00, outStatePerCredit: 947.00, internationalPerCredit: 947.00, ranking: 180, totalStudents: 23000, acceptanceRate: 92, description: 'Top-ranked public university in Allendale, Michigan with strong liberal arts and professional programs.', avgTimeToGraduate: 2.0 },
+    { code: 'FSU', name: 'Ferris State University', type: 'UNIVERSITY', inStatePerCredit: 515.00, outStatePerCredit: 515.00, internationalPerCredit: 853.00, ranking: 250, totalStudents: 10000, acceptanceRate: 84, description: 'Career-focused university in Big Rapids, known for health sciences, engineering, and technology programs.', avgTimeToGraduate: 2.0 },
+    { code: 'WMU', name: 'Western Michigan University', type: 'UNIVERSITY', inStatePerCredit: 658.92, outStatePerCredit: 823.65, internationalPerCredit: 823.65, ranking: 230, totalStudents: 19000, acceptanceRate: 79, description: 'Large research university in Kalamazoo with diverse programs and strong aviation, engineering, and business schools.', avgTimeToGraduate: 2.0 },
+    { code: 'SVSU', name: 'Saginaw Valley State University', type: 'UNIVERSITY', inStatePerCredit: 570.00, outStatePerCredit: 570.00, internationalPerCredit: 570.00, ranking: 80, totalStudents: 8000, acceptanceRate: 92, description: 'Affordable public university in University Center with strong nursing, business, and engineering programs.', avgTimeToGraduate: 2.0 },
   ]
 
   const schools: any = {}
@@ -48,6 +48,7 @@ async function main() {
         totalStudents: s.totalStudents ?? null,
         acceptanceRate: s.acceptanceRate ?? null,
         description: s.description ?? null,
+        avgTimeToGraduate: s.avgTimeToGraduate ?? null,
       }, 
       create: s 
     })

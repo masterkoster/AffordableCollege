@@ -42,6 +42,7 @@ model School {
   acceptanceRate       Float?  // Acceptance rate as percentage (e.g., 75.5)
   description          String? // Short description of the university
   logoUrl             String?  // Path to logo in public/logos folder
+  avgTimeToGraduate    Float?  // Average time to graduate in years (e.g., 2.5 for CC -> University)
   
   origins  TransferGuide[] @relation("OriginSchool")
   targets  TransferGuide[] @relation("TargetSchool")
@@ -77,7 +78,10 @@ model TransferGuide {
   totalCredits       Int?    // Total credits needed for the degree
   catalogUrl         String? // Link to the program in the university catalog
   
-  // JSON array of courses: [{code: "MTH 161", name: "Calculus I", credits: 4}, ...]
+  // JSON array of courses with transfer mapping:
+  // [{c: "MTH 161", n: "Calculus I", cr: 4, eq: "MTH 1554", major: true}, ...]
+  // eq: equivalent course code at target university (null = doesn't transfer)
+  // major: true if major-specific course, false if general education
   courses         String
   
   createdAt       DateTime @default(now())

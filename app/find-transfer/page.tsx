@@ -4,6 +4,24 @@ import { FindTransferForm } from './FindTransferForm'
 
 export const dynamic = 'force-dynamic'
 
+type GuideOption = {
+  majorId: string
+  majorName: string
+  originSchoolId: string
+  originSchoolName: string
+  targetSchoolId: string
+  targetSchoolName: string
+}
+
+type SchoolTuition = {
+  id: string
+  code: string
+  name: string
+  type: string
+  inStatePerCredit: number | null
+  outStatePerCredit: number | null
+}
+
 export default async function FindTransferPage() {
   const guides = await prisma.transferGuide.findMany({
     include: {
@@ -13,13 +31,34 @@ export default async function FindTransferPage() {
     },
   })
 
-  const guideOptions = guides.map((g) => ({
+  const guideOptions: GuideOption[] = guides.map((g) => ({
     majorId: g.majorId,
     majorName: g.major.name,
     originSchoolId: g.originSchoolId,
     originSchoolName: g.originSchool.name,
     targetSchoolId: g.targetSchoolId,
     targetSchoolName: g.targetSchool.name,
+  }))
+
+  // Get all schools with tuition data
+  const schools = await prisma.school.findMany({
+    select: {
+      id: true,
+      code: true,
+      name: true,
+      type: true,
+      inStatePerCredit: true,
+      outStatePerCredit: true,
+    },
+  })
+
+  const tuitionData: SchoolTuition[] = schools.map((s) => ({
+    id: s.id,
+    code: s.code,
+    name: s.name,
+    type: s.type,
+    inStatePerCredit: s.inStatePerCredit ?? 0,
+    outStatePerCredit: s.outStatePerCredit ?? 0,
   }))
 
   return (
@@ -45,7 +84,7 @@ export default async function FindTransferPage() {
         </div>
 
         <div className="card p-8">
-          <FindTransferForm guides={guideOptions} />
+          <FindTransferForm guides={guideOptions} tuitionData={tuitionData} />
         </div>
 
         <p className="text-center text-sm text-slate-400 mt-6">

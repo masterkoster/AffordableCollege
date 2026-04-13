@@ -12,10 +12,13 @@ interface Course {
 
 export default async function TransferGuideDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ schoolId: string; universityId: string; majorId: string }>
+  searchParams: Promise<{ compare?: string }>
 }) {
   const { schoolId, universityId, majorId } = await params
+  const compareUniversityId = (await searchParams).compare
   
   const guide = await prisma.transferGuide.findFirst({
     where: {
@@ -29,6 +32,23 @@ export default async function TransferGuideDetailPage({
       major: true,
     },
   })
+
+  // Fetch comparison guide if requested
+  let compareGuide = null
+  if (compareUniversityId) {
+    compareGuide = await prisma.transferGuide.findFirst({
+      where: {
+        originSchoolId: schoolId,
+        targetSchoolId: compareUniversityId,
+        majorId: majorId,
+      },
+      include: {
+        originSchool: true,
+        targetSchool: true,
+        major: true,
+      },
+    })
+  }
 
   if (!guide) {
     return (
@@ -47,6 +67,7 @@ export default async function TransferGuideDetailPage({
   }
 
   const courses = JSON.parse(guide.courses || '[]') as Course[]
+  const compareCourses = compareGuide ? JSON.parse(compareGuide.courses || '[]') as Course[] : []
 
   // Transform for client component
   const guideData = {
@@ -71,5 +92,26 @@ export default async function TransferGuideDetailPage({
     major: { name: guide.major.name },
   }
 
-  return <TransferGuideClient guide={guideData} />
+  // Transform comparison guide if exists
+  const compareGuideData = compareGuide ? {
+    id: compareGuide.id,
+    requirements: compareGuide.requirements,
+    autoAdmitGPA: compareGuide.autoAdmitGPA,
+    programDescription: compareGuide.programDescription,
+    degreeType: compareGuide.degreeType,
+    totalCredits: compareGuide.totalCredits,
+    catalogUrl: compareGuide.catalogUrl,
+    courses: compareCourses,
+    targetSchool: { 
+      name: compareGuide.targetSchool.name,
+      code: compareGuide.targetSchool.code,
+      description: compareGuide.targetSchool.description,
+      ranking: compareGuide.targetSchool.ranking,
+      totalStudents: compareGuide.targetSchool.totalStudents,
+      acceptanceRate: compareGuide.targetSchool.acceptanceRate,
+      inStatePerCredit: compareGuide.targetSchool.inStatePerCredit,
+    },
+  } : null
+
+  return <TransferGuideClient guide={guideData} compareGuide={compareGuideData} />
 }
