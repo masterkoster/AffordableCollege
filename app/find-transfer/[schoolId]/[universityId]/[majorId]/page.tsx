@@ -38,10 +38,16 @@ export default async function TransferGuideDetailPage({
   const originSchoolId = originSchool?.id ?? schoolId
   const targetSchoolId = targetSchool?.id ?? universityId
   
-  // Look up major by code or use as UUID
-  const major = await prisma.major.findUnique({
+  // Look up major by code, then by name, or use as UUID
+  let major = await prisma.major.findUnique({
     where: { code: majorId.toUpperCase() },
   })
+  // If not found by code, try by name (handles URL edge cases)
+  if (!major) {
+    major = await prisma.major.findFirst({
+      where: { name: { equals: majorId, mode: 'insensitive' } },
+    })
+  }
   const majorIdToUse = major?.id ?? majorId
   
   // Fetch all available transfer guides for this origin + major (to know what can be compared)

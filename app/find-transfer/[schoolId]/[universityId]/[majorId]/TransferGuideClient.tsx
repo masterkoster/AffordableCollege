@@ -225,7 +225,7 @@ export default function TransferGuideClient({
           <ComparisonSelector 
             guide={guide} 
             originSchoolCode={guide.originSchool.code}
-            majorCode={guide.major.name}
+            majorCode={guide.major.code}
             availableUniversities={availableUniversities}
           />
         )}
