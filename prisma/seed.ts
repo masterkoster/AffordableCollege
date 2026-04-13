@@ -28,6 +28,7 @@ async function main() {
     { code: 'EMU', name: 'Eastern Michigan University', type: 'UNIVERSITY' },
     { code: 'GVSU', name: 'Grand Valley State University', type: 'UNIVERSITY' },
     { code: 'FSU', name: 'Ferris State University', type: 'UNIVERSITY' },
+    { code: 'WMU', name: 'Western Michigan University', type: 'UNIVERSITY' },
   ]
 
   const schools: any = {}
@@ -335,6 +336,44 @@ async function main() {
       { c: 'STQM 260', n: 'Introduction to Statistics', cr: 3 },
       { c: 'ENG 101', n: 'Composition I', cr: 3 },
       { c: 'COM 101', n: 'Fundamentals of Speaking', cr: 3 },
+    ] },
+    // WMU Transfer Agreements (from real transfer guides)
+    // Macomb → WMU Business Administration
+    { o: 'Macomb', t: 'WMU', m: 'BUS', r: 'GPA >= 2.0', a: 2.0, c: [
+      { c: 'BUS 1750', n: 'Business Enterprise', cr: 3 },
+      { c: 'CIS 1020', n: 'Business Computing', cr: 3 },
+      { c: 'BCM 1420', n: 'Freshman Composition', cr: 3 },
+      { c: 'MATH 1160', n: 'Finite Mathematics', cr: 3 },
+      { c: 'CIS 2500', n: 'Data Analytics for Business', cr: 3 },
+      { c: 'ECON 2010', n: 'Microeconomics', cr: 3 },
+      { c: 'ACTY 2100', n: 'Accounting I', cr: 3 },
+      { c: 'ACTY 2110', n: 'Accounting II', cr: 3 },
+      { c: 'MKTG 2500', n: 'Marketing Principles', cr: 3 },
+      { c: 'MGMT 2500', n: 'Organizational Behavior', cr: 3 },
+    ] },
+    // Macomb → WMU Computer Science
+    { o: 'Macomb', t: 'WMU', m: 'CS', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'MATH 140', n: 'Pre-Calculus', cr: 4 },
+      { c: 'MATH 170', n: 'Calculus I', cr: 4 },
+      { c: 'MATH 171', n: 'Calculus II', cr: 4 },
+      { c: 'PHYS 240', n: 'General Physics I', cr: 4 },
+      { c: 'PHYS 250', n: 'General Physics II', cr: 4 },
+      { c: 'CS 105', n: 'Intro to Programming', cr: 3 },
+      { c: 'CS 116', n: 'Computer Programming I', cr: 4 },
+      { c: 'CS 216', n: 'Computer Programming II', cr: 4 },
+      { c: 'ENGL 1050', n: 'Thought and Writing', cr: 4 },
+    ] },
+    // HenryFord → WMU Business Administration
+    { o: 'HenryFord', t: 'WMU', m: 'BUS', r: 'GPA >= 2.0', a: 2.0, c: [
+      { c: 'BUS 121', n: 'Business Enterprise', cr: 3 },
+      { c: 'CIS 120', n: 'Business Computing', cr: 3 },
+      { c: 'ENG 131', n: 'Composition I', cr: 3 },
+      { c: 'MTH 119', n: 'Finite Mathematics', cr: 3 },
+      { c: 'ECN 231', n: 'Microeconomics', cr: 3 },
+      { c: 'ACC 211', n: 'Accounting I', cr: 4 },
+      { c: 'ACC 212', n: 'Accounting II', cr: 4 },
+      { c: 'MKT 201', n: 'Marketing Principles', cr: 3 },
+      { c: 'MGT 153', n: 'Principles of Management', cr: 3 },
     ] },
   ]
 
