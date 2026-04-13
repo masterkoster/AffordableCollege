@@ -611,22 +611,44 @@ function ComparisonSection({
       <div className="card p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200">
         <h2 className="text-xl font-bold text-slate-900 mb-4">University Comparison</h2>
         
-        {/* Per Credit Costs */}
-        <div className="grid md:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white p-4 rounded-lg border">
-            <p className="text-sm text-slate-500 mb-1">{originSchoolName}</p>
-            <p className="text-2xl font-bold text-slate-900">${primaryStats.originTuition}</p>
-            <p className="text-xs text-slate-400">per credit</p>
+        {/* Per Credit Costs - Updated to show CC vs University comparison */}
+        <div className="grid md:grid-cols-2 gap-6 mb-6">
+          {/* Primary University */}
+          <div className="bg-white p-4 rounded-lg border-2 border-blue-200">
+            <p className="text-sm font-semibold text-blue-700 mb-3">{guide.targetSchool.name}</p>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-slate-600">CC ({originSchoolName})</span>
+                <span className="text-lg font-bold text-slate-900">${primaryStats.originTuition}/cr</span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t border-slate-100">
+                <span className="text-sm text-slate-500">If taken at {guide.targetSchool.name}</span>
+                <span className="text-lg font-bold text-amber-600">${primaryStats.uniTuition}/cr</span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t border-slate-100 bg-amber-50 -mx-4 px-4 -mb-4 pb-3 rounded-b-lg">
+                <span className="text-sm font-medium text-slate-700">Savings per credit</span>
+                <span className="text-lg font-bold text-green-600">${primaryStats.uniTuition - primaryStats.originTuition}</span>
+              </div>
+            </div>
           </div>
-          <div className="bg-white p-4 rounded-lg border border-blue-200">
-            <p className="text-sm text-slate-500 mb-1">{guide.targetSchool.name}</p>
-            <p className="text-2xl font-bold text-blue-600">${primaryStats.uniTuition}</p>
-            <p className="text-xs text-slate-400">per credit</p>
-          </div>
-          <div className="bg-white p-4 rounded-lg border border-green-200">
-            <p className="text-sm text-slate-500 mb-1">{compareGuide.targetSchool.name}</p>
-            <p className="text-2xl font-bold text-green-600">${compareStats.uniTuition}</p>
-            <p className="text-xs text-slate-400">per credit</p>
+          
+          {/* Compare University */}
+          <div className="bg-white p-4 rounded-lg border-2 border-green-200">
+            <p className="text-sm font-semibold text-green-700 mb-3">{compareGuide.targetSchool.name}</p>
+            <div className="space-y-2">
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-slate-600">CC ({originSchoolName})</span>
+                <span className="text-lg font-bold text-slate-900">${compareStats.originTuition}/cr</span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t border-slate-100">
+                <span className="text-sm text-slate-500">If taken at {compareGuide.targetSchool.name}</span>
+                <span className="text-lg font-bold text-amber-600">${compareStats.uniTuition}/cr</span>
+              </div>
+              <div className="flex justify-between items-center pt-2 border-t border-slate-100 bg-amber-50 -mx-4 px-4 -mb-4 pb-3 rounded-b-lg">
+                <span className="text-sm font-medium text-slate-700">Savings per credit</span>
+                <span className="text-lg font-bold text-green-600">${compareStats.uniTuition - compareStats.originTuition}</span>
+              </div>
+            </div>
           </div>
         </div>
         
