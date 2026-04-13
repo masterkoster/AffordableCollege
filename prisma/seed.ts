@@ -36,7 +36,21 @@ async function main() {
 
   const schools: any = {}
   for (const s of [...cc, ...univ]) {
-    const created = await prisma.school.upsert({ where: { code: s.code }, update: {}, create: s })
+    const created = await prisma.school.upsert({ 
+      where: { code: s.code }, 
+      update: { 
+        name: s.name,
+        type: s.type,
+        inStatePerCredit: s.inStatePerCredit ?? null,
+        outStatePerCredit: s.outStatePerCredit ?? null,
+        internationalPerCredit: s.internationalPerCredit ?? null,
+        ranking: s.ranking ?? null,
+        totalStudents: s.totalStudents ?? null,
+        acceptanceRate: s.acceptanceRate ?? null,
+        description: s.description ?? null,
+      }, 
+      create: s 
+    })
     schools[s.code] = created
   }
   console.log('Schools created')
