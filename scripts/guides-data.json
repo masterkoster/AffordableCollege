@@ -1,0 +1,548 @@
+[
+  {
+    "o": "HenryFord",
+    "t": "OU",
+    "m": "CS",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "MTH 161",
+        "name": "Calculus I",
+        "credits": 4
+      },
+      {
+        "code": "MTH 162",
+        "name": "Calculus II",
+        "credits": 4
+      },
+      {
+        "code": "CS 150",
+        "name": "Introduction to Computer Science",
+        "credits": 3
+      },
+      {
+        "code": "CS 200",
+        "name": "Data Structures",
+        "credits": 3
+      },
+      {
+        "code": "PHY 151",
+        "name": "Physics I - Mechanics",
+        "credits": 4
+      },
+      {
+        "code": "ENG 101",
+        "name": "English Composition I",
+        "credits": 3
+      }
+    ]
+  },
+  {
+    "o": "Macomb",
+    "t": "OU",
+    "m": "BIO",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "BIO 151",
+        "name": "General Biology I",
+        "credits": 4
+      },
+      {
+        "code": "BIO 152",
+        "name": "General Biology II",
+        "credits": 4
+      },
+      {
+        "code": "CHM 151",
+        "name": "General Chemistry I",
+        "credits": 4
+      },
+      {
+        "code": "CHM 152",
+        "name": "General Chemistry II",
+        "credits": 4
+      },
+      {
+        "code": "MTH 155",
+        "name": "Statistics",
+        "credits": 4
+      },
+      {
+        "code": "PHY 151",
+        "name": "Physics I",
+        "credits": 4
+      }
+    ]
+  },
+  {
+    "o": "Macomb",
+    "t": "OU",
+    "m": "BUS",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "ACC 101",
+        "name": "Financial Accounting",
+        "credits": 3
+      },
+      {
+        "code": "ACC 102",
+        "name": "Managerial Accounting",
+        "credits": 3
+      },
+      {
+        "code": "ECO 201",
+        "name": "Principles of Economics I",
+        "credits": 3
+      },
+      {
+        "code": "ECO 202",
+        "name": "Principles of Economics II",
+        "credits": 3
+      },
+      {
+        "code": "MTH 155",
+        "name": "Statistics",
+        "credits": 4
+      },
+      {
+        "code": "ENG 101",
+        "name": "English Composition I",
+        "credits": 3
+      }
+    ]
+  },
+  {
+    "o": "Macomb",
+    "t": "OU",
+    "m": "CS",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "MTH 161",
+        "name": "Calculus I",
+        "credits": 4
+      },
+      {
+        "code": "MTH 162",
+        "name": "Calculus II",
+        "credits": 4
+      },
+      {
+        "code": "CS 150",
+        "name": "Introduction to Computer Science",
+        "credits": 3
+      },
+      {
+        "code": "CS 200",
+        "name": "Data Structures",
+        "credits": 3
+      },
+      {
+        "code": "PHY 151",
+        "name": "Physics I - Mechanics",
+        "credits": 4
+      },
+      {
+        "code": "ENG 101",
+        "name": "English Composition I",
+        "credits": 3
+      }
+    ]
+  },
+  {
+    "o": "Macomb",
+    "t": "OU",
+    "m": "ENG",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "MTH 161",
+        "name": "Calculus I",
+        "credits": 4
+      },
+      {
+        "code": "MTH 162",
+        "name": "Calculus II",
+        "credits": 4
+      },
+      {
+        "code": "PHY 151",
+        "name": "Physics I - Mechanics",
+        "credits": 4
+      },
+      {
+        "code": "PHY 152",
+        "name": "Physics II - Electricity",
+        "credits": 4
+      },
+      {
+        "code": "CHM 151",
+        "name": "General Chemistry I",
+        "credits": 4
+      },
+      {
+        "code": "ENG 101",
+        "name": "English Composition I",
+        "credits": 3
+      }
+    ]
+  },
+  {
+    "o": "OCC",
+    "t": "OU",
+    "m": "BIO",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "BIO 151",
+        "name": "General Biology I",
+        "credits": 4
+      },
+      {
+        "code": "BIO 152",
+        "name": "General Biology II",
+        "credits": 4
+      },
+      {
+        "code": "CHM 151",
+        "name": "General Chemistry I",
+        "credits": 4
+      },
+      {
+        "code": "CHM 152",
+        "name": "General Chemistry II",
+        "credits": 4
+      },
+      {
+        "code": "MTH 155",
+        "name": "Statistics",
+        "credits": 4
+      },
+      {
+        "code": "PHY 151",
+        "name": "Physics I",
+        "credits": 4
+      }
+    ]
+  },
+  {
+    "o": "OCC",
+    "t": "OU",
+    "m": "BUS",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "ACC 101",
+        "name": "Financial Accounting",
+        "credits": 3
+      },
+      {
+        "code": "ACC 102",
+        "name": "Managerial Accounting",
+        "credits": 3
+      },
+      {
+        "code": "ECO 201",
+        "name": "Principles of Economics I",
+        "credits": 3
+      },
+      {
+        "code": "ECO 202",
+        "name": "Principles of Economics II",
+        "credits": 3
+      },
+      {
+        "code": "MTH 155",
+        "name": "Statistics",
+        "credits": 4
+      },
+      {
+        "code": "ENG 101",
+        "name": "English Composition I",
+        "credits": 3
+      }
+    ]
+  },
+  {
+    "o": "OCC",
+    "t": "OU",
+    "m": "CS",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "MTH 161",
+        "name": "Calculus I",
+        "credits": 4
+      },
+      {
+        "code": "MTH 162",
+        "name": "Calculus II",
+        "credits": 4
+      },
+      {
+        "code": "CS 150",
+        "name": "Introduction to Computer Science",
+        "credits": 3
+      },
+      {
+        "code": "CS 200",
+        "name": "Data Structures",
+        "credits": 3
+      },
+      {
+        "code": "PHY 151",
+        "name": "Physics I - Mechanics",
+        "credits": 4
+      },
+      {
+        "code": "ENG 101",
+        "name": "English Composition I",
+        "credits": 3
+      }
+    ]
+  },
+  {
+    "o": "OCC",
+    "t": "OU",
+    "m": "ENG",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "MTH 161",
+        "name": "Calculus I",
+        "credits": 4
+      },
+      {
+        "code": "MTH 162",
+        "name": "Calculus II",
+        "credits": 4
+      },
+      {
+        "code": "PHY 151",
+        "name": "Physics I - Mechanics",
+        "credits": 4
+      },
+      {
+        "code": "PHY 152",
+        "name": "Physics II - Electricity",
+        "credits": 4
+      },
+      {
+        "code": "CHM 151",
+        "name": "General Chemistry I",
+        "credits": 4
+      },
+      {
+        "code": "ENG 101",
+        "name": "English Composition I",
+        "credits": 3
+      }
+    ]
+  },
+  {
+    "o": "OCC",
+    "t": "OU",
+    "m": "NUR",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "BIO 151",
+        "name": "General Biology I",
+        "credits": 4
+      },
+      {
+        "code": "CHM 151",
+        "name": "General Chemistry I",
+        "credits": 4
+      },
+      {
+        "code": "MTH 155",
+        "name": "Statistics",
+        "credits": 4
+      },
+      {
+        "code": "PSY 101",
+        "name": "Introduction to Psychology",
+        "credits": 3
+      },
+      {
+        "code": "SOC 101",
+        "name": "Introduction to Sociology",
+        "credits": 3
+      },
+      {
+        "code": "ENG 101",
+        "name": "English Composition I",
+        "credits": 3
+      }
+    ]
+  },
+  {
+    "o": "Schoolcraft",
+    "t": "OU",
+    "m": "BIO",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "BIO 151",
+        "name": "General Biology I",
+        "credits": 4
+      },
+      {
+        "code": "BIO 152",
+        "name": "General Biology II",
+        "credits": 4
+      },
+      {
+        "code": "CHM 151",
+        "name": "General Chemistry I",
+        "credits": 4
+      },
+      {
+        "code": "CHM 152",
+        "name": "General Chemistry II",
+        "credits": 4
+      },
+      {
+        "code": "MTH 155",
+        "name": "Statistics",
+        "credits": 4
+      },
+      {
+        "code": "PHY 151",
+        "name": "Physics I",
+        "credits": 4
+      }
+    ]
+  },
+  {
+    "o": "Schoolcraft",
+    "t": "OU",
+    "m": "BUS",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "ACC 101",
+        "name": "Financial Accounting",
+        "credits": 3
+      },
+      {
+        "code": "ACC 102",
+        "name": "Managerial Accounting",
+        "credits": 3
+      },
+      {
+        "code": "ECO 201",
+        "name": "Principles of Economics I",
+        "credits": 3
+      },
+      {
+        "code": "ECO 202",
+        "name": "Principles of Economics II",
+        "credits": 3
+      },
+      {
+        "code": "MTH 155",
+        "name": "Statistics",
+        "credits": 4
+      },
+      {
+        "code": "ENG 101",
+        "name": "English Composition I",
+        "credits": 3
+      }
+    ]
+  },
+  {
+    "o": "Schoolcraft",
+    "t": "OU",
+    "m": "CS",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "MTH 161",
+        "name": "Calculus I",
+        "credits": 4
+      },
+      {
+        "code": "MTH 162",
+        "name": "Calculus II",
+        "credits": 4
+      },
+      {
+        "code": "CS 150",
+        "name": "Introduction to Computer Science",
+        "credits": 3
+      },
+      {
+        "code": "CS 200",
+        "name": "Data Structures",
+        "credits": 3
+      },
+      {
+        "code": "PHY 151",
+        "name": "Physics I - Mechanics",
+        "credits": 4
+      },
+      {
+        "code": "ENG 101",
+        "name": "English Composition I",
+        "credits": 3
+      }
+    ]
+  },
+  {
+    "o": "WCCCD",
+    "t": "OU",
+    "m": "CS",
+    "r": "GPA >= 2.5",
+    "a": 2.8,
+    "c": [
+      {
+        "code": "MTH 161",
+        "name": "Calculus I",
+        "credits": 4
+      },
+      {
+        "code": "MTH 162",
+        "name": "Calculus II",
+        "credits": 4
+      },
+      {
+        "code": "CS 150",
+        "name": "Introduction to Computer Science",
+        "credits": 3
+      },
+      {
+        "code": "CS 200",
+        "name": "Data Structures",
+        "credits": 3
+      },
+      {
+        "code": "PHY 151",
+        "name": "Physics I - Mechanics",
+        "credits": 4
+      },
+      {
+        "code": "ENG 101",
+        "name": "English Composition I",
+        "credits": 3
+      }
+    ]
+  }
+]
