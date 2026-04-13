@@ -226,7 +226,7 @@ async function main() {
       { c: 'BIO 211', n: 'Genetics', cr: 4 },
       { c: 'MATH 184', n: 'Calculus II', cr: 4 },
     ] },
-    // Henry Ford → Oakland University
+    // Henry Ford → Oakland University (full courses from official PDF)
     { o: 'HenryFord', t: 'OU', m: 'CS', r: 'GPA >= 2.5', a: 2.8, c: [
       { c: 'MTH 160', n: 'Calculus I', cr: 4 },
       { c: 'MTH 161', n: 'Calculus II', cr: 4 },
