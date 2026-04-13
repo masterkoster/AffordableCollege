@@ -59,6 +59,160 @@ type AvailableUniversity = {
   name: string
 }
 
+// Course equivalency mapping based on Michigan Transfer Network and known agreements
+// Key: CC code -> university code -> { equivalent code, equivalent name }
+const courseEquivalencies: Record<string, Record<string, { code: string; name: string } | null>> = {
+  // Oakland Community College (OCC) equivalencies
+  'MAT 1730': {
+    'WSU': { code: 'MATH 1710', name: 'Calculus I' },
+    'OU': { code: 'MTH 1554', name: 'Calculus I' },
+    'EMU': { code: 'MATH 120', name: 'Calculus I' },
+    'GVSU': { code: 'MTH 201', name: 'Calculus I' },
+  },
+  'MAT 1740': {
+    'WSU': { code: 'MATH 1720', name: 'Calculus II' },
+    'OU': { code: 'MTH 1555', name: 'Calculus II' },
+    'EMU': { code: 'MATH 121', name: 'Calculus II' },
+    'GVSU': { code: 'MTH 202', name: 'Calculus II' },
+  },
+  'CIS 1500': {
+    'WSU': { code: 'CS 1000', name: 'Introduction to Computers' },
+    'OU': { code: 'CSI 1300', name: 'Intro to Computing' },
+    'EMU': { code: 'CIS 100', name: 'Intro to IT' },
+    'GVSU': { code: 'CIS 101', name: 'Introduction to Computing' },
+  },
+  'CIS 2252': {
+    'WSU': { code: 'CS 2000', name: 'Data Structures' },
+    'OU': { code: 'CSI 2310', name: 'Data Structures' },
+    'EMU': { code: 'CIS 225', name: 'Data Structures' },
+    'GVSU': { code: 'CS 253', name: 'Data Structures' },
+  },
+  'CIS 2353': {
+    'WSU': { code: 'CS 3000', name: 'Algorithms' },
+    'OU': { code: 'CSI 3430', name: 'Theory of Computation' },
+    'EMU': { code: 'CIS 300', name: 'Algorithms' },
+    'GVSU': { code: 'CS 350', name: 'Algorithms' },
+  },
+  'EGR 1100': {
+    'WSU': { code: 'ENG 1020', name: 'Engineer in Society' },
+    'OU': { code: 'EGR 1200', name: 'Engineering Fundamentals' },
+    'EMU': { code: 'ENGR 100', name: 'Engineering Fundamentals' },
+    'GVSU': { code: 'EGR 100', name: 'Engineering Foundations' },
+  },
+  // Macomb equivalencies
+  'MATH 1760': {
+    'OU': { code: 'MTH 1554', name: 'Calculus I' },
+    'WSU': { code: 'MATH 1710', name: 'Calculus I' },
+    'EMU': { code: 'MATH 120', name: 'Calculus I' },
+    'GVSU': { code: 'MTH 201', name: 'Calculus I' },
+    'WMU': { code: 'MATH 1700', name: 'Calculus I' },
+    'FSU': { code: 'MATH 120', name: 'Pre-Calculus' },
+    'SVSU': { code: 'MATH 161', name: 'Calculus I' },
+  },
+  'MATH 1770': {
+    'OU': { code: 'MTH 1555', name: 'Calculus II' },
+    'WSU': { code: 'MATH 1720', name: 'Calculus II' },
+    'EMU': { code: 'MATH 121', name: 'Calculus II' },
+    'GVSU': { code: 'MTH 202', name: 'Calculus II' },
+    'WMU': { code: 'MATH 1710', name: 'Calculus II' },
+    'FSU': { code: 'MATH 130', name: 'Calculus I' },
+    'SVSU': { code: 'MATH 162', name: 'Calculus II' },
+  },
+  'ITCS 1140': {
+    'OU': { code: 'CSI 1320', name: 'Problem Solving with Python' },
+    'WSU': { code: 'CS 1020', name: 'Intro to Programming' },
+    'EMU': { code: 'CIS 111', name: 'SQL for Database' },
+    'GVSU': { code: 'CIS 241', name: 'Systems Programming I' },
+  },
+  'ITCS 1170': {
+    'OU': { code: 'CSI 2300', name: 'Object-Oriented Programming' },
+    'WSU': { code: 'CS 2000', name: 'Data Structures' },
+    'EMU': { code: 'CIS 125', name: 'Principles of Programming' },
+    'GVSU': { code: 'CIS 251', name: 'Systems Programming II' },
+  },
+  'ITCS 2250': {
+    'OU': { code: 'CSI 2310', name: 'Data Structures' },
+    'WSU': { code: 'CS 2500', name: 'Algorithms' },
+    'EMU': { code: 'CIS 225', name: 'Data Structures' },
+    'GVSU': { code: 'CS 253', name: 'Data Structures' },
+  },
+  'ITCS 2530': {
+    'OU': { code: 'CSI 2470', name: 'Computer Networks' },
+    'WSU': { code: 'CS 2810', name: 'Computer Organization' },
+    'EMU': { code: 'CIS 240', name: 'Computer Architecture' },
+    'GVSU': { code: 'CS 351', name: 'Computer Systems' },
+  },
+  'MATH 2200': {
+    'OU': { code: 'MTH 2775', name: 'Discrete Mathematics' },
+    'WSU': { code: 'MATH 2200', name: 'Discrete Math' },
+    'EMU': { code: 'MATH 220', name: 'Discrete Structures' },
+    'GVSU': { code: 'MTH 225', name: 'Discrete Structures' },
+  },
+  'PHYS 2220': {
+    'OU': { code: 'PHY 1510', name: 'Physics I' },
+    'WSU': { code: 'PHY 2130', name: 'Physics I' },
+    'EMU': { code: 'PHYS 240', name: 'General Physics I' },
+    'GVSU': { code: 'PHY 230', name: 'General Physics I' },
+  },
+  // Henry Ford equivalencies
+  'MATH 180': {
+    'OU': { code: 'MTH 1554', name: 'Calculus I' },
+    'WSU': { code: 'MATH 1710', name: 'Calculus I' },
+    'EMU': { code: 'MATH 120', name: 'Calculus I' },
+    'WMU': { code: 'MATH 1700', name: 'Calculus I' },
+  },
+  'MATH 183': {
+    'OU': { code: 'MTH 1555', name: 'Calculus II' },
+    'WSU': { code: 'MATH 1720', name: 'Calculus II' },
+    'EMU': { code: 'MATH 121', name: 'Calculus II' },
+    'WMU': { code: 'MATH 1710', name: 'Calculus II' },
+  },
+  'CIS 170': {
+    'OU': { code: 'CSI 2300', name: 'Object-Oriented Programming' },
+    'WSU': { code: 'CS 2000', name: 'Data Structures' },
+    'EMU': { code: 'CIS 125', name: 'Principles of Programming' },
+    'WMU': { code: 'CS 116', name: 'Computer Programming I' },
+  },
+  // Schoolcraft equivalencies
+  'MATH 150': {
+    'OU': { code: 'MTH 1554', name: 'Calculus I' },
+    'WSU': { code: 'MATH 1710', name: 'Calculus I' },
+  },
+  'MATH 151': {
+    'OU': { code: 'MTH 1555', name: 'Calculus II' },
+    'WSU': { code: 'MATH 1720', name: 'Calculus II' },
+  },
+  'CIS 120': {
+    'OU': { code: 'CSI 1300', name: 'Intro to Computing' },
+    'WSU': { code: 'CS 1000', name: 'Introduction to Computers' },
+  },
+  // Common general education courses that typically transfer
+  'ENG 131': { 'OU': { code: 'ENG 1010', name: 'Composition I' }, 'WSU': { code: 'ENG 1020', name: 'Intro to College Writing' }, 'EMU': { code: 'ENG 101', name: 'College Writing I' }, 'GVSU': { code: 'WRT 150', name: 'Strategies in Writing' } },
+  'ENG 132': { 'OU': { code: 'ENG 1020', name: 'Composition II' }, 'WSU': { code: 'ENG 1030', name: 'College Writing II' }, 'EMU': { code: 'ENG 102', name: 'College Writing II' }, 'GVSU': { code: 'WRT 150', name: 'Strategies in Writing' } },
+  'ENGL 1181': { 'OU': { code: 'ENG 1010', name: 'Composition I' }, 'WSU': { code: 'ENG 1020', name: 'Intro to College Writing' } },
+  'ENGL 1190': { 'OU': { code: 'ENG 1020', name: 'Composition II' }, 'WSU': { code: 'ENG 1030', name: 'College Writing II' } },
+}
+
+// Get the appropriate origin tuition based on school code
+function getOriginTuition(schoolCode: string): number {
+  const tuitionMap: Record<string, number> = {
+    'OCC': 211,
+    'Macomb': 113,
+    'Schoolcraft': 250,
+    'HenryFord': 135,
+  }
+  return tuitionMap[schoolCode] || 135
+}
+
+// Check if a course transfers to a specific university
+function getCourseEquivalency(ccCode: string, universityCode: string): { code: string; name: string } | null {
+  // Check if we have mapping for this CC course
+  if (courseEquivalencies[ccCode]) {
+    return courseEquivalencies[ccCode][universityCode] || null
+  }
+  return null
+}
+
 export default function TransferGuideClient({ 
   guide,
   compareGuide,
@@ -71,9 +225,8 @@ export default function TransferGuideClient({
   const courses = guide.courses
   const router = useRouter()
   
-  // Calculate costs and transfer stats
-  // originTuition is the tuition per credit at the community college
-  const originTuition = 135 // Default CC tuition per credit
+  // Calculate costs and transfer stats - use correct CC tuition
+  const originTuition = getOriginTuition(guide.originSchool.code)
   const primaryStats = calculateStats(guide, originTuition)
   const compareStats = compareGuide ? calculateStats(compareGuide, originTuition) : null
   
@@ -230,25 +383,37 @@ export default function TransferGuideClient({
           />
         )}
 
-        <div className="card overflow-hidden mb-6">
-          <div className="px-6 py-4 border-b border-slate-200 bg-slate-50">
-            <h2 className="text-lg font-semibold text-slate-900">Required Courses</h2>
+        {/* Course Comparison Section - Only show when comparing */}
+        {compareGuide ? (
+          <CourseComparison 
+            primaryCourses={guide.courses}
+            compareCourses={compareGuide.courses}
+            primaryUniCode={guide.targetSchool.code}
+            compareUniCode={compareGuide.targetSchool.code}
+            primaryUniName={guide.targetSchool.name}
+            compareUniName={compareGuide.targetSchool.name}
+          />
+        ) : (
+          <div className="card overflow-hidden mb-6">
+            <div className="px-6 py-4 border-b border-slate-200 bg-slate-50">
+              <h2 className="text-lg font-semibold text-slate-900">Required Courses</h2>
+            </div>
+            <table className="w-full">
+              <thead>
+                <tr className="border-b border-slate-200">
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Code</th>
+                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Course Name</th>
+                  <th className="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase">Credits</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {courses.map((course, idx) => (
+                  <CourseRow key={idx} course={course} />
+                ))}
+              </tbody>
+            </table>
           </div>
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-slate-200">
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Code</th>
-                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Course Name</th>
-                <th className="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase">Credits</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {courses.map((course, idx) => (
-                <CourseRow key={idx} course={course} />
-              ))}
-            </tbody>
-          </table>
-        </div>
+        )}
 
         <div className="card p-6 bg-blue-50 border-blue-200">
           <h2 className="text-lg font-semibold text-slate-900 mb-2">Ready to Transfer?</h2>
@@ -814,4 +979,272 @@ function calculateStats(guideData: TransferGuideData | CompareGuideData, originT
     uniSemesters,
     totalYears
   }
+}
+
+// Course comparison component - shows side by side with equivalency status
+function CourseComparison({
+  primaryCourses,
+  compareCourses,
+  primaryUniCode,
+  compareUniCode,
+  primaryUniName,
+  compareUniName
+}: {
+  primaryCourses: Course[]
+  compareCourses: Course[]
+  primaryUniCode: string
+  compareUniCode: string
+  primaryUniName: string
+  compareUniName: string
+}) {
+  // Get all unique CC course codes
+  const allCourseCodes = useMemo(() => {
+    const codes = new Set<string>()
+    primaryCourses.forEach(c => codes.add(c.code))
+    return Array.from(codes)
+  }, [primaryCourses])
+  
+  // Categorize courses
+  const { inBoth, primaryOnly, compareOnly } = useMemo(() => {
+    const primaryCodes = new Set(primaryCourses.map(c => c.code))
+    const compareCodes = new Set(compareCourses.map(c => c.code))
+    
+    const inBoth: { code: string; name: string; credits: number; primaryEquiv: { code: string; name: string } | null; compareEquiv: { code: string; name: string } | null }[] = []
+    const primaryOnly: { code: string; name: string; credits: number; primaryEquiv: { code: string; name: string } | null }[] = []
+    const compareOnly: { code: string; name: string; credits: number; compareEquiv: { code: string; name: string } | null }[] = []
+    
+    // Find courses in primary
+    primaryCourses.forEach(course => {
+      if (compareCodes.has(course.code)) {
+        const primaryEquiv = getCourseEquivalency(course.code, primaryUniCode)
+        const compareEquiv = getCourseEquivalency(course.code, compareUniCode)
+        inBoth.push({
+          code: course.code,
+          name: course.name,
+          credits: course.credits,
+          primaryEquiv,
+          compareEquiv
+        })
+      } else {
+        const primaryEquiv = getCourseEquivalency(course.code, primaryUniCode)
+        primaryOnly.push({
+          code: course.code,
+          name: course.name,
+          credits: course.credits,
+          primaryEquiv
+        })
+      }
+    })
+    
+    // Find courses only in compare
+    compareCourses.forEach(course => {
+      if (!primaryCodes.has(course.code)) {
+        const compareEquiv = getCourseEquivalency(course.code, compareUniCode)
+        compareOnly.push({
+          code: course.code,
+          name: course.name,
+          credits: course.credits,
+          compareEquiv
+        })
+      }
+    })
+    
+    return { inBoth, primaryOnly, compareOnly }
+  }, [primaryCourses, compareCourses, primaryUniCode, compareUniCode])
+  
+  const primaryTotalCredits = primaryCourses.reduce((sum, c) => sum + c.credits, 0)
+  const compareTotalCredits = compareCourses.reduce((sum, c) => sum + c.credits, 0)
+  const commonCredits = inBoth.reduce((sum, c) => sum + c.credits, 0)
+  const primaryOnlyCredits = primaryOnly.reduce((sum, c) => sum + c.credits, 0)
+  const compareOnlyCredits = compareOnly.reduce((sum, c) => sum + c.credits, 0)
+  
+  return (
+    <div className="space-y-6 mb-6">
+      {/* Header */}
+      <div className="card p-6 bg-gradient-to-r from-purple-50 to-indigo-50 border-2 border-purple-200">
+        <h2 className="text-xl font-bold text-slate-900 mb-4">Course Transfer Comparison</h2>
+        
+        {/* Summary Stats */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+          <div className="bg-white p-3 rounded-lg border text-center">
+            <p className="text-xs text-slate-500">Common Courses</p>
+            <p className="text-lg font-bold text-green-600">{inBoth.length}</p>
+            <p className="text-xs text-slate-400">{commonCredits} credits</p>
+          </div>
+          <div className="bg-white p-3 rounded-lg border text-center">
+            <p className="text-xs text-slate-500">{primaryUniName} Only</p>
+            <p className="text-lg font-bold text-blue-600">{primaryOnly.length}</p>
+            <p className="text-xs text-slate-400">{primaryOnlyCredits} credits</p>
+          </div>
+          <div className="bg-white p-3 rounded-lg border text-center">
+            <p className="text-xs text-slate-500">{compareUniName} Only</p>
+            <p className="text-lg font-bold text-amber-600">{compareOnly.length}</p>
+            <p className="text-xs text-slate-400">{compareOnlyCredits} credits</p>
+          </div>
+          <div className="bg-white p-3 rounded-lg border text-center">
+            <p className="text-xs text-slate-500">Total Difference</p>
+            <p className="text-lg font-bold text-purple-600">{Math.abs(primaryTotalCredits - compareTotalCredits)}</p>
+            <p className="text-xs text-slate-400">credits</p>
+          </div>
+        </div>
+        
+        {/* Legend */}
+        <div className="flex flex-wrap gap-4 text-sm">
+          <div className="flex items-center gap-2">
+            <span className="w-4 h-4 bg-green-100 border border-green-300 rounded"></span>
+            <span className="text-slate-600">Transfers to both</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-4 h-4 bg-blue-100 border border-blue-300 rounded"></span>
+            <span className="text-slate-600">Only required for {primaryUniName}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="w-4 h-4 bg-amber-100 border border-amber-300 rounded"></span>
+            <span className="text-slate-600">Only required for {compareUniName}</span>
+          </div>
+        </div>
+      </div>
+      
+      {/* Courses that transfer to both - Green */}
+      {inBoth.length > 0 && (
+        <div className="card overflow-hidden border-2 border-green-200">
+          <div className="px-6 py-3 bg-green-50 border-b border-green-200 flex items-center gap-2">
+            <span className="w-3 h-3 bg-green-500 rounded-full"></span>
+            <h3 className="font-semibold text-green-800">Courses Transferring to Both ({inBoth.length} courses, {commonCredits} credits)</h3>
+          </div>
+          <table className="w-full">
+            <thead>
+              <tr className="bg-green-25 border-b border-green-200">
+                <th className="px-6 py-2 text-left text-xs font-semibold text-green-700">CC Course</th>
+                <th className="px-6 py-2 text-left text-xs font-semibold text-green-700">{primaryUniName} Equivalent</th>
+                <th className="px-6 py-2 text-left text-xs font-semibold text-green-700">{compareUniName} Equivalent</th>
+                <th className="px-6 py-2 text-right text-xs font-semibold text-green-700">Credits</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-green-100">
+              {inBoth.map((course, idx) => (
+                <tr key={idx} className="hover:bg-green-25">
+                  <td className="px-6 py-3">
+                    <div className="font-medium text-slate-900">{course.code}</div>
+                    <div className="text-sm text-slate-500">{course.name}</div>
+                  </td>
+                  <td className="px-6 py-3">
+                    {course.primaryEquiv ? (
+                      <div>
+                        <div className="font-medium text-blue-600">{course.primaryEquiv.code}</div>
+                        <div className="text-sm text-slate-500">{course.primaryEquiv.name}</div>
+                      </div>
+                    ) : (
+                      <span className="text-amber-600 text-sm">Equivalent course accepted</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-3">
+                    {course.compareEquiv ? (
+                      <div>
+                        <div className="font-medium text-green-600">{course.compareEquiv.code}</div>
+                        <div className="text-sm text-slate-500">{course.compareEquiv.name}</div>
+                      </div>
+                    ) : (
+                      <span className="text-amber-600 text-sm">Equivalent course accepted</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-3 text-right font-medium text-slate-600">{course.credits}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      
+      {/* Courses only required for primary university - Blue */}
+      {primaryOnly.length > 0 && (
+        <div className="card overflow-hidden border-2 border-blue-200">
+          <div className="px-6 py-3 bg-blue-50 border-b border-blue-200 flex items-center gap-2">
+            <span className="w-3 h-3 bg-blue-500 rounded-full"></span>
+            <h3 className="font-semibold text-blue-800">Only Required for {primaryUniName} ({primaryOnly.length} courses, {primaryOnlyCredits} credits)</h3>
+          </div>
+          <table className="w-full">
+            <thead>
+              <tr className="bg-blue-25 border-b border-blue-200">
+                <th className="px-6 py-2 text-left text-xs font-semibold text-blue-700">CC Course</th>
+                <th className="px-6 py-2 text-left text-xs font-semibold text-blue-700">{primaryUniName} Equivalent</th>
+                <th className="px-6 py-2 text-right text-xs font-semibold text-blue-700">Credits</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-blue-100">
+              {primaryOnly.map((course, idx) => (
+                <tr key={idx} className="hover:bg-blue-25">
+                  <td className="px-6 py-3">
+                    <div className="font-medium text-slate-900">{course.code}</div>
+                    <div className="text-sm text-slate-500">{course.name}</div>
+                  </td>
+                  <td className="px-6 py-3">
+                    {course.primaryEquiv ? (
+                      <div>
+                        <div className="font-medium text-blue-600">{course.primaryEquiv.code}</div>
+                        <div className="text-sm text-slate-500">{course.primaryEquiv.name}</div>
+                      </div>
+                    ) : (
+                      <span className="text-amber-600 text-sm">Check with advisor</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-3 text-right font-medium text-slate-600">{course.credits}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      
+      {/* Courses only required for compare university - Amber */}
+      {compareOnly.length > 0 && (
+        <div className="card overflow-hidden border-2 border-amber-200">
+          <div className="px-6 py-3 bg-amber-50 border-b border-amber-200 flex items-center gap-2">
+            <span className="w-3 h-3 bg-amber-500 rounded-full"></span>
+            <h3 className="font-semibold text-amber-800">Only Required for {compareUniName} ({compareOnly.length} courses, {compareOnlyCredits} credits)</h3>
+          </div>
+          <table className="w-full">
+            <thead>
+              <tr className="bg-amber-25 border-b border-amber-200">
+                <th className="px-6 py-2 text-left text-xs font-semibold text-amber-700">CC Course</th>
+                <th className="px-6 py-2 text-left text-xs font-semibold text-amber-700">{compareUniName} Equivalent</th>
+                <th className="px-6 py-2 text-right text-xs font-semibold text-amber-700">Credits</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-amber-100">
+              {compareOnly.map((course, idx) => (
+                <tr key={idx} className="hover:bg-amber-25">
+                  <td className="px-6 py-3">
+                    <div className="font-medium text-slate-900">{course.code}</div>
+                    <div className="text-sm text-slate-500">{course.name}</div>
+                  </td>
+                  <td className="px-6 py-3">
+                    {course.compareEquiv ? (
+                      <div>
+                        <div className="font-medium text-green-600">{course.compareEquiv.code}</div>
+                        <div className="text-sm text-slate-500">{course.compareEquiv.name}</div>
+                      </div>
+                    ) : (
+                      <span className="text-amber-600 text-sm">Check with advisor</span>
+                    )}
+                  </td>
+                  <td className="px-6 py-3 text-right font-medium text-slate-600">{course.credits}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      
+      {/* Warning if course counts differ significantly */}
+      {Math.abs(primaryTotalCredits - compareTotalCredits) > 5 && (
+        <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+          <p className="text-red-700 font-medium">
+            Note: The total required credits differ by {Math.abs(primaryTotalCredits - compareTotalCredits)} credits. 
+            This may affect your time to graduation and total cost.
+          </p>
+        </div>
+      )}
+    </div>
+  )
 }
