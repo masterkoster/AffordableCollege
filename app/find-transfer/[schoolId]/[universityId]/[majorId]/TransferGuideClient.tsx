@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -567,14 +567,21 @@ function ComparisonSelector({
     return null
   }
   
-  // Auto-compare if there's only one option
-  const hasSingleOption = availableUniversities.length === 1
-  const singleOptionId = hasSingleOption ? availableUniversities[0].id : ''
+  // Auto-redirect to comparison page if there's only one option
+  useEffect(() => {
+    if (availableUniversities.length === 1) {
+      const targetId = availableUniversities[0].id
+      router.push(`/find-transfer/${originSchoolId}/${targetId}/${majorId}?compareWith=${guide.targetSchool.code}`)
+    }
+  }, [availableUniversities, originSchoolId, majorId, guide.targetSchool.code])
   
-  // Auto-navigate if there's only one option
-  if (hasSingleOption) {
-    router.push(`/find-transfer/${originSchoolId}/${singleOptionId}/${majorId}?compareWith=${guide.targetSchool.code}`)
-    return null
+  // If there's only one option, don't render the dropdown (it will redirect)
+  if (availableUniversities.length === 1) {
+    return (
+      <div className="card p-6 mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
+        <p className="text-sm text-slate-600">Loading comparison...</p>
+      </div>
+    )
   }
   
   return (
