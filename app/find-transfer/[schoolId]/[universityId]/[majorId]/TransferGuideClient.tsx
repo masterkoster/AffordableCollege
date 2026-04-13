@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import * as Dialog from '@radix-ui/react-dialog'
@@ -566,24 +566,7 @@ function ComparisonSelector({
   if (availableUniversities.length === 0) {
     return null
   }
-  
-  // Auto-redirect to comparison page if there's only one option
-  useEffect(() => {
-    if (availableUniversities.length === 1) {
-      const targetId = availableUniversities[0].id
-      router.push(`/find-transfer/${originSchoolId}/${targetId}/${majorId}?compareWith=${guide.targetSchool.code}`)
-    }
-  }, [availableUniversities, originSchoolId, majorId, guide.targetSchool.code])
-  
-  // If there's only one option, don't render the dropdown (it will redirect)
-  if (availableUniversities.length === 1) {
-    return (
-      <div className="card p-6 mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
-        <p className="text-sm text-slate-600">Loading comparison...</p>
-      </div>
-    )
-  }
-  
+
   return (
     <div className="card p-6 mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
       <div className="flex items-start gap-4">
@@ -595,13 +578,7 @@ function ComparisonSelector({
           <div className="flex gap-3">
             <select
               value={selectedCompareId}
-              onChange={(e) => {
-                const value = e.target.value
-                setSelectedCompareId(value)
-                if (value) {
-                  router.push(`/find-transfer/${originSchoolId}/${value}/${majorId}?compareWith=${guide.targetSchool.code}`)
-                }
-              }}
+              onChange={(e) => setSelectedCompareId(e.target.value)}
               className="input-field flex-1"
             >
               <option value="">Select university to compare...</option>
@@ -609,6 +586,13 @@ function ComparisonSelector({
                 <option key={uni.id} value={uni.id}>{uni.name}</option>
               ))}
             </select>
+            <button 
+              onClick={handleCompare}
+              disabled={!selectedCompareId}
+              className="btn-primary whitespace-nowrap"
+            >
+              Compare
+            </button>
           </div>
         </div>
       </div>
