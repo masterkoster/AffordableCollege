@@ -21,16 +21,34 @@ export default async function TransferGuideDetailPage({
   searchParams,
 }: {
   params: Promise<{ schoolId: string; universityId: string; majorId: string }>
-  searchParams: Promise<{ compareWith?: string }>
+  searchParams: Promise<{ compare?: string }>
 }) {
   const { schoolId, universityId, majorId } = await params
-  const compareUniversityCode = (await searchParams).compareWith
+  const compareUniversityCode = (await searchParams).compare
+  
+  // Look up schools by code to get IDs
+  const originSchool = await prisma.school.findUnique({
+    where: { code: schoolId.toUpperCase() },
+  })
+  const targetSchool = await prisma.school.findUnique({
+    where: { code: universityId.toUpperCase() },
+  })
+  
+  // If not found by code, try as UUID
+  const originSchoolId = originSchool?.id ?? schoolId
+  const targetSchoolId = targetSchool?.id ?? universityId
+  
+  // Look up major by code or use as UUID
+  const major = await prisma.major.findUnique({
+    where: { code: majorId.toUpperCase() },
+  })
+  const majorIdToUse = major?.id ?? majorId
   
   // Fetch all available transfer guides for this origin + major (to know what can be compared)
   const availableGuides = await prisma.transferGuide.findMany({
     where: {
-      originSchoolId: schoolId,
-      majorId: majorId,
+      originSchoolId: originSchoolId,
+      majorId: majorIdToUse,
     },
     include: {
       targetSchool: true,
@@ -39,19 +57,19 @@ export default async function TransferGuideDetailPage({
   
   // Get list of available universities to compare (include ID for dropdown)
   const availableUniversities: AvailableUniversity[] = availableGuides
-    .filter(g => g.targetSchoolId !== universityId)
+    .filter(g => g.targetSchoolId !== targetSchoolId)
     .map(g => ({
       code: g.targetSchool.code.toLowerCase(),
       name: g.targetSchool.name,
-      id: g.targetSchoolId, // Include ID for dropdown
+      id: g.targetSchool.code.toLowerCase(), // Use code for simpler URL
     }))
   
   // Fetch the main guide
   const guide = await prisma.transferGuide.findFirst({
     where: {
-      originSchoolId: schoolId,
-      targetSchoolId: universityId,
-      majorId: majorId,
+      originSchoolId: originSchoolId,
+      targetSchoolId: targetSchoolId,
+      majorId: majorIdToUse,
     },
     include: {
       originSchool: true,
@@ -70,9 +88,9 @@ export default async function TransferGuideDetailPage({
     if (compareSchool) {
       compareGuide = await prisma.transferGuide.findFirst({
         where: {
-          originSchoolId: schoolId,
+          originSchoolId: originSchoolId,
           targetSchoolId: compareSchool.id,
-          majorId: majorId,
+          majorId: majorIdToUse,
         },
         include: {
           originSchool: true,
@@ -112,7 +130,7 @@ export default async function TransferGuideDetailPage({
     totalCredits: guide.totalCredits,
     catalogUrl: guide.catalogUrl,
     courses,
-    originSchool: { id: guide.originSchoolId, name: guide.originSchool.name },
+    originSchool: { code: guide.originSchool.code, name: guide.originSchool.name },
     targetSchool: { 
       name: guide.targetSchool.name,
       code: guide.targetSchool.code,
@@ -122,7 +140,7 @@ export default async function TransferGuideDetailPage({
       acceptanceRate: guide.targetSchool.acceptanceRate,
       inStatePerCredit: guide.targetSchool.inStatePerCredit,
     },
-    major: { name: guide.major.name },
+    major: { code: guide.major.code, name: guide.major.name },
   }
 
   // Transform comparison guide if exists

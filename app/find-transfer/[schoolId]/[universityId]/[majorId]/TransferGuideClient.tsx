@@ -20,7 +20,7 @@ interface TransferGuideData {
   totalCredits: number | null
   catalogUrl: string | null
   courses: Course[]
-  originSchool: { id: string; name: string }
+  originSchool: { code: string; name: string }
   targetSchool: { 
     name: string
     code: string
@@ -30,7 +30,7 @@ interface TransferGuideData {
     acceptanceRate: number | null
     inStatePerCredit: number | null
   }
-  major: { name: string }
+  major: { code: string; name: string }
 }
 
 // Comparison guide doesn't need originSchool and major
@@ -57,7 +57,6 @@ interface CompareGuideData {
 type AvailableUniversity = {
   code: string
   name: string
-  id: string
 }
 
 export default function TransferGuideClient({ 
@@ -225,8 +224,8 @@ export default function TransferGuideClient({
         ) : (
           <ComparisonSelector 
             guide={guide} 
-            originSchoolId={guide.originSchool.id}
-            majorId={guide.major.name}
+            originSchoolCode={guide.originSchool.code}
+            majorCode={guide.major.name}
             availableUniversities={availableUniversities}
           />
         )}
@@ -533,35 +532,24 @@ function CourseRow({ course }: { course: Course }) {
 // Comparison selector component - shown when no comparison is selected
 function ComparisonSelector({ 
   guide, 
-  originSchoolId, 
-  majorId,
+  originSchoolCode, 
+  majorCode,
   availableUniversities = []
 }: { 
   guide: TransferGuideData
-  originSchoolId: string
-  majorId: string 
+  originSchoolCode: string
+  majorCode: string 
   availableUniversities?: AvailableUniversity[]
 }) {
   const router = useRouter()
-  const [selectedCompareId, setSelectedCompareId] = useState('')
+  const [selectedCompareCode, setSelectedCompareCode] = useState('')
   
   const handleCompare = () => {
-    if (selectedCompareId) {
-      // Navigate to the comparison university page with original as compare param
-      // Use IDs for path, pass original UUID as query param
-      router.push(`/find-transfer/${originSchoolId}/${selectedCompareId}/${majorId}?compareWith=${guide.targetSchool.code}`)
+    if (selectedCompareCode) {
+      router.push(`/find-transfer/${originSchoolCode}/${selectedCompareCode}/${majorCode}?compare=${guide.targetSchool.code}`)
     }
   }
-  
-  // Also navigate immediately when dropdown selection changes
-  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value
-    setSelectedCompareId(value)
-    if (value) {
-      router.push(`/find-transfer/${originSchoolId}/${value}/${majorId}?compareWith=${guide.targetSchool.code}`)
-    }
-  }
-  
+
   // Don't show the comparison section if there are no other universities to compare
   if (availableUniversities.length === 0) {
     return null
@@ -577,18 +565,18 @@ function ComparisonSelector({
           </p>
           <div className="flex gap-3">
             <select
-              value={selectedCompareId}
-              onChange={(e) => setSelectedCompareId(e.target.value)}
+              value={selectedCompareCode}
+              onChange={(e) => setSelectedCompareCode(e.target.value)}
               className="input-field flex-1"
             >
               <option value="">Select university to compare...</option>
               {availableUniversities.map((uni) => (
-                <option key={uni.id} value={uni.id}>{uni.name}</option>
+                <option key={uni.code} value={uni.code}>{uni.name}</option>
               ))}
             </select>
             <button 
               onClick={handleCompare}
-              disabled={!selectedCompareId}
+              disabled={!selectedCompareCode}
               className="btn-primary whitespace-nowrap"
             >
               Compare

@@ -5,11 +5,11 @@ import { FindTransferForm } from './FindTransferForm'
 export const dynamic = 'force-dynamic'
 
 type GuideOption = {
-  majorId: string
+  majorCode: string
   majorName: string
-  originSchoolId: string
+  originSchoolCode: string
   originSchoolName: string
-  targetSchoolId: string
+  targetSchoolCode: string
   targetSchoolName: string
 }
 
@@ -23,11 +23,11 @@ export default async function FindTransferPage() {
   })
 
   const guideOptions: GuideOption[] = guides.map((g) => ({
-    majorId: g.majorId,
+    majorCode: g.major.code,
     majorName: g.major.name,
-    originSchoolId: g.originSchoolId,
+    originSchoolCode: g.originSchool.code,
     originSchoolName: g.originSchool.name,
-    targetSchoolId: g.targetSchoolId,
+    targetSchoolCode: g.targetSchool.code,
     targetSchoolName: g.targetSchool.name,
   }))
 

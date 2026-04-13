@@ -4,11 +4,11 @@ import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 type GuideOption = {
-  majorId: string
+  majorCode: string
   majorName: string
-  originSchoolId: string
+  originSchoolCode: string
   originSchoolName: string
-  targetSchoolId: string
+  targetSchoolCode: string
   targetSchoolName: string
 }
 
@@ -18,53 +18,53 @@ interface Props {
 
 export function FindTransferForm({ guides }: Props) {
   const router = useRouter()
-  const [majorId, setMajorId] = useState('')
-  const [schoolId, setSchoolId] = useState('')
-  const [universityId, setUniversityId] = useState('')
+  const [majorCode, setMajorCode] = useState('')
+  const [schoolCode, setSchoolCode] = useState('')
+  const [universityCode, setUniversityCode] = useState('')
 
   // Unique majors that actually have transfer guides
   const majors = useMemo(() => {
     const map = new Map<string, string>()
     guides.forEach((g) => {
-      if (!map.has(g.majorId)) map.set(g.majorId, g.majorName)
+      if (!map.has(g.majorCode)) map.set(g.majorCode, g.majorName)
     })
     return Array.from(map.entries())
-      .map(([id, name]) => ({ id, name }))
+      .map(([code, name]) => ({ code, name }))
       .sort((a, b) => a.name.localeCompare(b.name))
   }, [guides])
 
   // Schools that have a guide for the selected major
   const schoolsForMajor = useMemo(() => {
-    if (!majorId) return []
+    if (!majorCode) return []
     const map = new Map<string, string>()
     guides
-      .filter((g) => g.majorId === majorId)
+      .filter((g) => g.majorCode === majorCode)
       .forEach((g) => {
-        if (!map.has(g.originSchoolId)) map.set(g.originSchoolId, g.originSchoolName)
+        if (!map.has(g.originSchoolCode)) map.set(g.originSchoolCode, g.originSchoolName)
       })
     return Array.from(map.entries())
-      .map(([id, name]) => ({ id, name }))
+      .map(([code, name]) => ({ code, name }))
       .sort((a, b) => a.name.localeCompare(b.name))
-  }, [guides, majorId])
+  }, [guides, majorCode])
 
   // Universities that have an agreement for the selected major + school
   const universitiesForSelection = useMemo(() => {
-    if (!majorId || !schoolId) return []
+    if (!majorCode || !schoolCode) return []
     const map = new Map<string, string>()
     guides
-      .filter((g) => g.majorId === majorId && g.originSchoolId === schoolId)
+      .filter((g) => g.majorCode === majorCode && g.originSchoolCode === schoolCode)
       .forEach((g) => {
-        if (!map.has(g.targetSchoolId)) map.set(g.targetSchoolId, g.targetSchoolName)
+        if (!map.has(g.targetSchoolCode)) map.set(g.targetSchoolCode, g.targetSchoolName)
       })
     return Array.from(map.entries())
-      .map(([id, name]) => ({ id, name }))
+      .map(([code, name]) => ({ code, name }))
       .sort((a, b) => a.name.localeCompare(b.name))
-  }, [guides, majorId, schoolId])
+  }, [guides, majorCode, schoolCode])
 
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (majorId && schoolId && universityId) {
-      router.push(`/find-transfer/${schoolId}/${universityId}/${majorId}`)
+    if (majorCode && schoolCode && universityCode) {
+      router.push(`/find-transfer/${schoolCode}/${universityCode}/${majorCode}`)
     }
   }
 
@@ -73,19 +73,19 @@ export function FindTransferForm({ guides }: Props) {
       <div>
         <label className="input-label">Desired Major</label>
         <select
-          name="majorId"
+          name="majorCode"
           className="input-field"
-          value={majorId}
+          value={majorCode}
           onChange={(e) => {
-            setMajorId(e.target.value)
-            setSchoolId('')
-            setUniversityId('')
+            setMajorCode(e.target.value)
+            setSchoolCode('')
+            setUniversityCode('')
           }}
           required
         >
           <option value="">Select your major...</option>
           {majors.map((major) => (
-            <option key={major.id} value={major.id}>
+            <option key={major.code} value={major.code}>
               {major.name}
             </option>
           ))}
@@ -95,44 +95,44 @@ export function FindTransferForm({ guides }: Props) {
       <div>
         <label className="input-label">Current School (Community College)</label>
         <select
-          name="schoolId"
+          name="schoolCode"
           className="input-field"
-          value={schoolId}
+          value={schoolCode}
           onChange={(e) => {
-            setSchoolId(e.target.value)
-            setUniversityId('')
+            setSchoolCode(e.target.value)
+            setUniversityCode('')
           }}
           required
-          disabled={!majorId}
+          disabled={!majorCode}
         >
           <option value="">Select your school...</option>
           {schoolsForMajor.map((school) => (
-            <option key={school.id} value={school.id}>
+            <option key={school.code} value={school.code}>
               {school.name}
             </option>
           ))}
         </select>
-        {!majorId && <p className="text-xs text-slate-400 mt-1">Choose a major first to see matching schools.</p>}
+        {!majorCode && <p className="text-xs text-slate-400 mt-1">Choose a major first to see matching schools.</p>}
       </div>
 
       <div>
         <label className="input-label">Target University</label>
         <select
-          name="universityId"
+          name="universityCode"
           className="input-field"
-          value={universityId}
-          onChange={(e) => setUniversityId(e.target.value)}
+          value={universityCode}
+          onChange={(e) => setUniversityCode(e.target.value)}
           required
-          disabled={!majorId || !schoolId}
+          disabled={!majorCode || !schoolCode}
         >
           <option value="">Select university...</option>
           {universitiesForSelection.map((uni) => (
-            <option key={uni.id} value={uni.id}>
+            <option key={uni.code} value={uni.code}>
               {uni.name}
             </option>
           ))}
         </select>
-        {(!majorId || !schoolId) && (
+        {(!majorCode || !schoolCode) && (
           <p className="text-xs text-slate-400 mt-1">Pick a major and school to see available universities.</p>
         )}
       </div>
@@ -140,7 +140,7 @@ export function FindTransferForm({ guides }: Props) {
       <button
         type="submit"
         className="btn-primary w-full py-3"
-        disabled={!majorId || !schoolId || !universityId}
+        disabled={!majorCode || !schoolCode || !universityCode}
       >
         Find Transfer Guide
       </button>
