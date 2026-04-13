@@ -24,6 +24,7 @@ async function main() {
   // Universities
   const univ = [
     { code: 'OU', name: 'Oakland University', type: 'UNIVERSITY' },
+    { code: 'WSU', name: 'Wayne State University', type: 'UNIVERSITY' },
   ]
 
   const schools: any = {}
@@ -195,6 +196,65 @@ async function main() {
       { c: 'BIOL 120', n: 'General Biology I', cr: 4 },
       { c: 'ENG 101', n: 'Composition I', cr: 3 },
       { c: 'ENG 102', n: 'Composition II', cr: 3 },
+    ] },
+    // Wayne State University Transfer Agreements (from real PDFs)
+    // Macomb → WSU Business
+    { o: 'Macomb', t: 'WSU', m: 'BUS', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'ACCT 1080', n: 'Principles of Accounting I', cr: 4 },
+      { c: 'ACCT 1090', n: 'Principles of Accounting II', cr: 4 },
+      { c: 'BLAW 1080', n: 'Business Law', cr: 4 },
+      { c: 'ECON 1170', n: 'Principles of Economics', cr: 3 },
+      { c: 'ITCS 1010', n: 'Computer & Info Processing', cr: 4 },
+      { c: 'MGMT 1010', n: 'Principles of Management', cr: 3 },
+      { c: 'MKTG 1010', n: 'Principles of Marketing', cr: 3 },
+      { c: 'ENG 1210', n: 'Composition 1', cr: 3 },
+      { c: 'ENG 1220', n: 'Composition 2', cr: 3 },
+    ] },
+    // Macomb → WSU Computer Science
+    { o: 'Macomb', t: 'WSU', m: 'CS', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'MATH 2200', n: 'Discrete Math', cr: 4 },
+      { c: 'ITCS 2530', n: 'C++ Programming I', cr: 4 },
+      { c: 'ITCS 2550', n: 'C++ Programming II', cr: 3 },
+      { c: 'ITCS 2700', n: 'Data Structures', cr: 4 },
+      { c: 'ITCS 1140', n: 'Intro to Design & Implementation', cr: 4 },
+      { c: 'ENGR 1000', n: 'Intro to Engineering', cr: 3 },
+      { c: 'ENG 1210', n: 'Composition 1', cr: 3 },
+      { c: 'ENG 1220', n: 'Composition 2', cr: 3 },
+    ] },
+    // Schoolcraft → WSU Business
+    { o: 'Schoolcraft', t: 'WSU', m: 'BUS', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'ACCT 201', n: 'Principles of Accounting I', cr: 4 },
+      { c: 'ACCT 202', n: 'Principles of Accounting II', cr: 4 },
+      { c: 'CIS 120', n: 'Intro to Information Technology', cr: 3 },
+      { c: 'STA 1020', n: 'Introduction to Statistics', cr: 3 },
+      { c: 'BUS 207', n: 'Business Law', cr: 4 },
+      { c: 'COMA 103', n: 'Fundamentals of Speaking', cr: 3 },
+      { c: 'ECON 201', n: 'Principles of Economics - Macro', cr: 3 },
+      { c: 'ECON 202', n: 'Principles of Economics - Micro', cr: 3 },
+      { c: 'ENG 102', n: 'Composition II', cr: 3 },
+    ] },
+    // HenryFord → WSU Computer Science
+    { o: 'HenryFord', t: 'WSU', m: 'CS', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'MATH 180', n: 'Calculus I', cr: 5 },
+      { c: 'MATH 183', n: 'Calculus II', cr: 5 },
+      { c: 'MATH 280', n: 'Calculus III', cr: 4 },
+      { c: 'MATH 283', n: 'Linear Algebra', cr: 4 },
+      { c: 'PHYS 231', n: 'University Physics I', cr: 5 },
+      { c: 'PHYS 232', n: 'University Physics II', cr: 5 },
+      { c: 'CIS 170', n: 'Programming II', cr: 3 },
+      { c: 'CIS 230', n: 'Data Structures', cr: 4 },
+      { c: 'CIS 271', n: 'Java Programming', cr: 3 },
+    ] },
+    // OCC → WSU Computer Science
+    { o: 'OCC', t: 'WSU', m: 'CS', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'MAT 1730', n: 'Calculus I', cr: 4 },
+      { c: 'MAT 1740', n: 'Calculus II', cr: 4 },
+      { c: 'MAT 2740', n: 'Calculus III', cr: 4 },
+      { c: 'MAT 2880', n: 'Linear Algebra', cr: 3 },
+      { c: 'CIS 1500', n: 'Intro to Programming', cr: 4 },
+      { c: 'CIS 2252', n: 'Data Structures', cr: 4 },
+      { c: 'CIS 2353', n: 'Algorithms', cr: 4 },
+      { c: 'EGR 1100', n: 'Intro to Engineering', cr: 3 },
     ] },
   ]
 
