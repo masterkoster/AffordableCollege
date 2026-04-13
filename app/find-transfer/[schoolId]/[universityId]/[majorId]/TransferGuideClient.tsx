@@ -225,6 +225,126 @@ const courseEquivalencies: Record<string, Record<string, { code: string; name: s
   'ENGL 1190': { 'OU': { code: 'ENG 1020', name: 'Composition II' }, 'WSU': { code: 'ENG 1030', name: 'College Writing II' } },
 }
 
+// Comprehensive MTA (Michigan Transfer Agreement) general education equivalencies
+// These are common gen ed courses that transfer to any Michigan university
+const mtaEquivalencies: Record<string, Record<string, { code: string; name: string }>> = {
+  // Oakland Community College (OCC)
+  'OCC': {
+    'ENG 1010': { code: 'ENG 1010', name: 'Composition I' },
+    'ENG 1020': { code: 'ENG 1020', name: 'Composition II' },
+    'COM 1010': { code: 'COM 1100', name: 'Public Speaking' },
+    'COM 1020': { code: 'COM 2400', name: 'Interpersonal Communication' },
+    'MAT 1580': { code: 'MTH 1554', name: 'Calculus I' },
+    'MAT 1590': { code: 'MTH 1555', name: 'Calculus II' },
+    'STA 2220': { code: 'STA 1020', name: 'Elementary Statistics' },
+    'BIO 1000': { code: 'BIO 1000', name: 'General Biology' },
+    'BIO 1010': { code: 'BIO 1011', name: 'General Biology Lab' },
+    'CHEM 1010': { code: 'CHEM 1010', name: 'General Chemistry I' },
+    'CHEM 1020': { code: 'CHEM 1020', name: 'General Chemistry II' },
+    'PHY 1010': { code: 'PHY 1010', name: 'General Physics I' },
+    'PHY 1020': { code: 'PHY 1020', name: 'General Physics II' },
+    'ECO 2010': { code: 'ECO 2010', name: 'Principles of Economics I' },
+    'ECO 2020': { code: 'ECO 2020', name: 'Principles of Economics II' },
+    'PSY 1010': { code: 'PSY 1010', name: 'Introduction to Psychology' },
+    'SOC 1010': { code: 'SOC 1010', name: 'Introduction to Sociology' },
+    'ART 1010': { code: 'ART 1010', name: 'Art Appreciation' },
+    'MUS 1010': { code: 'MUS 1010', name: 'Music Appreciation' },
+    'PHL 1010': { code: 'PHL 1010', name: 'Introduction to Philosophy' },
+    'HIST 1010': { code: 'HIST 1010', name: 'World History I' },
+    'HIST 1020': { code: 'HIST 1020', name: 'World History II' },
+  },
+  // Macomb Community College
+  'Macomb': {
+    'ENGL 1181': { code: 'ENG 1020', name: 'Intro to College Writing' },
+    'ENGL 1190': { code: 'ENG 1030', name: 'College Writing II' },
+    'SPCH 1060': { code: 'COM 1100', name: 'Public Speaking' },
+    'SPCH 1200': { code: 'COM 2400', name: 'Interpersonal Communication' },
+    'MATH 1340': { code: 'STA 1020', name: 'Statistics' },
+    'MATH 1465': { code: 'MTH 1554', name: 'Pre-Calculus' },
+    'MATH 1760': { code: 'MTH 1554', name: 'Calculus I' },
+    'MATH 1770': { code: 'MTH 1555', name: 'Calculus II' },
+    'BIOL 1000': { code: 'BIO 1000', name: 'General Biology' },
+    'CHEM 1170': { code: 'CHEM 1010', name: 'General Chemistry I' },
+    'CHEM 1180': { code: 'CHEM 1020', name: 'General Chemistry II' },
+    'PHYS 2220': { code: 'PHY 1010', name: 'Physics I' },
+    'PHYS 2230': { code: 'PHY 1020', name: 'Physics II' },
+    'ECON 201': { code: 'ECO 2010', name: 'Principles of Economics I' },
+    'ECON 202': { code: 'ECO 2020', name: 'Principles of Economics II' },
+    'PSY 101': { code: 'PSY 1010', name: 'Introduction to Psychology' },
+    'SOC 101': { code: 'SOC 1010', name: 'Introduction to Sociology' },
+    'ART 101': { code: 'ART 1010', name: 'Art Appreciation' },
+    'MUS 101': { code: 'MUS 1010', name: 'Music Appreciation' },
+    'PHIL 101': { code: 'PHL 1010', name: 'Introduction to Philosophy' },
+  },
+  // Schoolcraft College
+  'Schoolcraft': {
+    'ENG 101': { code: 'ENG 1010', name: 'Composition I' },
+    'ENG 102': { code: 'ENG 1020', name: 'Composition II' },
+    'SPE 101': { code: 'COM 1100', name: 'Public Speaking' },
+    'MTH 151': { code: 'MTH 1554', name: 'Calculus I' },
+    'MTH 152': { code: 'MTH 1555', name: 'Calculus II' },
+    'STA 101': { code: 'STA 1020', name: 'Statistics' },
+    'BIO 101': { code: 'BIO 1000', name: 'General Biology' },
+    'CHM 101': { code: 'CHEM 1010', name: 'General Chemistry I' },
+    'CHM 102': { code: 'CHEM 1020', name: 'General Chemistry II' },
+    'PHY 101': { code: 'PHY 1010', name: 'General Physics I' },
+    'PHY 102': { code: 'PHY 1020', name: 'General Physics II' },
+    'ECO 201': { code: 'ECO 2010', name: 'Principles of Economics I' },
+    'ECO 202': { code: 'ECO 2020', name: 'Principles of Economics II' },
+    'PSY 101': { code: 'PSY 1010', name: 'Introduction to Psychology' },
+    'SOC 101': { code: 'SOC 1010', name: 'Introduction to Sociology' },
+  },
+  // Henry Ford College
+  'HenryFord': {
+    'ENG 131': { code: 'ENG 1010', name: 'Composition I' },
+    'ENG 132': { code: 'ENG 1020', name: 'Composition II' },
+    'SPC 131': { code: 'COM 1100', name: 'Fundamentals of Speaking' },
+    'MATH 141': { code: 'STA 1020', name: 'Statistics' },
+    'MATH 165': { code: 'MTH 1554', name: 'Pre-Calculus' },
+    'MATH 180': { code: 'MTH 1554', name: 'Calculus I' },
+    'MATH 183': { code: 'MTH 1555', name: 'Calculus II' },
+    'BIO 131': { code: 'BIO 1000', name: 'General Biology' },
+    'CHEM 141': { code: 'CHEM 1010', name: 'General Chemistry I' },
+    'CHEM 142': { code: 'CHEM 1020', name: 'General Chemistry II' },
+    'PHYS 131': { code: 'PHY 1010', name: 'General Physics I' },
+    'PHYS 132': { code: 'PHY 1020', name: 'General Physics II' },
+    'ECO 201': { code: 'ECO 2010', name: 'Principles of Economics I' },
+    'ECO 202': { code: 'ECO 2020', name: 'Principles of Economics II' },
+    'PSY 131': { code: 'PSY 1010', name: 'Introduction to Psychology' },
+    'SOC 131': { code: 'SOC 1010', name: 'Introduction to Sociology' },
+  },
+}
+
+// Get MTA-equivalent course for a CC to a specific university
+function getMTAEquivalency(ccCode: string, ccSchool: string, uniCode: string): { code: string; name: string } | null {
+  const ccEquivs = mtaEquivalencies[ccSchool]
+  if (!ccEquivs) return null
+  return ccEquivs[ccCode] || null
+}
+
+// Helper to calculate graduation date from start semester and years
+function calculateGradDate(startSemester: string, years: number): string {
+  const [season, yearStr] = startSemester.split(' ')
+  const startYear = parseInt(yearStr)
+  const totalSemesters = Math.ceil(years * 2)
+  
+  let currentSeason = season === 'Fall' ? 'Fall' : 'Spring'
+  let currentYear = startYear
+  
+  for (let i = 0; i < totalSemesters; i++) {
+    if (i === totalSemesters - 1) {
+      if (currentSeason === 'Fall') {
+        return `December ${currentYear}`
+      } else {
+        return `May ${currentYear}`
+      }
+    }
+    currentSeason = currentSeason === 'Fall' ? 'Spring' : 'Fall'
+    if (currentSeason === 'Fall') currentYear++
+  }
+  return 'N/A'
+}
+
 // Get the appropriate origin tuition based on school code
 function getOriginTuition(schoolCode: string): number {
   const tuitionMap: Record<string, number> = {
@@ -257,6 +377,9 @@ export default function TransferGuideClient({
   const courses = guide.courses
   const router = useRouter()
   
+  // Start semester state
+  const [startSemester, setStartSemester] = useState('Fall 2025')
+  
   // Calculate costs and transfer stats - use correct CC tuition
   const originTuition = getOriginTuition(guide.originSchool.code)
   const primaryStats = calculateStats(guide, originTuition)
@@ -283,7 +406,7 @@ export default function TransferGuideClient({
       </nav>
 
       <main className="max-w-4xl mx-auto px-6 py-10">
-        <div className="text-center mb-10">
+        <div className="text-center mb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium mb-4">
             Transfer Guide
           </div>
@@ -293,6 +416,23 @@ export default function TransferGuideClient({
           <p className="text-slate-500">
             to {guide.targetSchool.name} — {guide.major.name}
           </p>
+        </div>
+
+        {/* Start Semester Selector */}
+        <div className="flex items-center justify-center gap-3 mb-6">
+          <span className="text-sm text-slate-600">I plan to start:</span>
+          <select 
+            value={startSemester} 
+            onChange={(e) => setStartSemester(e.target.value)}
+            className="text-sm border border-slate-300 rounded-lg px-3 py-2 bg-white"
+          >
+            <option>Spring 2025</option>
+            <option>Fall 2025</option>
+            <option>Spring 2026</option>
+            <option>Fall 2026</option>
+            <option>Spring 2027</option>
+            <option>Fall 2027</option>
+          </select>
         </div>
 
         {/* University Info Widget */}
@@ -372,6 +512,11 @@ export default function TransferGuideClient({
                   View Full Program Requirements →
                 </a>
               )}
+              <div className="mt-3 pt-3 border-t border-blue-100">
+                <span className="text-sm font-medium text-slate-700">
+                  Graduate by: <span className="text-green-600 font-bold">{calculateGradDate(startSemester, primaryStats.totalYears)}</span>
+                </span>
+              </div>
             </div>
           )}
         </div>
@@ -405,6 +550,7 @@ export default function TransferGuideClient({
             primaryStats={primaryStats}
             compareStats={compareStats}
             originSchoolName={guide.originSchool.name}
+            startSemester={startSemester}
           />
         ) : (
           <ComparisonSelector 
@@ -791,13 +937,15 @@ function ComparisonSection({
   compareGuide,
   primaryStats,
   compareStats,
-  originSchoolName
+  originSchoolName,
+  startSemester
 }: {
   guide: TransferGuideData
   compareGuide: CompareGuideData
   primaryStats: any
   compareStats: any
   originSchoolName: string
+  startSemester: string
 }) {
   const [isMI, setIsMI] = useState(true)
   const [gpa, setGPA] = useState('3.0')
@@ -931,7 +1079,7 @@ function ComparisonSection({
           <div className="w-full bg-slate-200 rounded-full h-4"><div className="bg-green-500 h-4 rounded-full" style={{width: maxNet > 0 ? `${(cNet/maxNet)*100}%` : '0%'}} /></div>
         </div>
         <div className="mt-4 flex items-center justify-between text-sm bg-white/60 rounded px-3 py-2">
-          <span className="text-slate-600">Grad: {primaryStats.totalYears.toFixed(1)}yr vs {compareStats.totalYears.toFixed(1)}yr</span>
+          <span className="text-slate-600">Grad: {calculateGradDate(startSemester, primaryStats.totalYears)} vs {calculateGradDate(startSemester, compareStats.totalYears)}</span>
           {winner && saveAmt > 0 && <span className="text-green-700 font-bold">💰 Save ${saveAmt.toLocaleString()} at {winner}</span>}
         </div>
       </div>
