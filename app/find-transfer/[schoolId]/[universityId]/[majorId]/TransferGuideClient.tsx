@@ -54,12 +54,19 @@ interface CompareGuideData {
   }
 }
 
+type AvailableUniversity = {
+  code: string
+  name: string
+}
+
 export default function TransferGuideClient({ 
   guide,
-  compareGuide 
+  compareGuide,
+  availableUniversities = []
 }: { 
   guide: TransferGuideData
   compareGuide?: CompareGuideData | null 
+  availableUniversities?: AvailableUniversity[]
 }) {
   const courses = guide.courses
   const router = useRouter()
@@ -219,6 +226,7 @@ export default function TransferGuideClient({
             guide={guide} 
             originSchoolId={guide.originSchool.id}
             majorId={guide.major.name}
+            availableUniversities={availableUniversities}
           />
         )}
 
@@ -525,31 +533,27 @@ function CourseRow({ course }: { course: Course }) {
 function ComparisonSelector({ 
   guide, 
   originSchoolId, 
-  majorId 
+  majorId,
+  availableUniversities = []
 }: { 
   guide: TransferGuideData
   originSchoolId: string
   majorId: string 
+  availableUniversities?: AvailableUniversity[]
 }) {
   const router = useRouter()
   const [selectedCompareId, setSelectedCompareId] = useState('')
-  
-  // Get all possible target universities (excluding current)
-  const availableUniversities = [
-    { id: 'ou', name: 'Oakland University' },
-    { id: 'wsu', name: 'Wayne State University' },
-    { id: 'emu', name: 'Eastern Michigan University' },
-    { id: 'gvsu', name: 'Grand Valley State University' },
-    { id: 'fsu', name: 'Ferris State University' },
-    { id: 'wmu', name: 'Western Michigan University' },
-    { id: 'svsu', name: 'Saginaw Valley State University' },
-  ].filter(u => u.id !== guide.targetSchool.code.toLowerCase())
   
   const handleCompare = () => {
     if (selectedCompareId) {
       // Navigate to the comparison university page with the original as compare param
       router.push(`/find-transfer/${originSchoolId}/${selectedCompareId}/${majorId}?compare=${guide.targetSchool.code}`)
     }
+  }
+  
+  // Don't show the comparison section if there are no other universities to compare
+  if (availableUniversities.length === 0) {
+    return null
   }
   
   return (
@@ -568,7 +572,7 @@ function ComparisonSelector({
             >
               <option value="">Select university to compare...</option>
               {availableUniversities.map((uni) => (
-                <option key={uni.id} value={uni.id}>{uni.name}</option>
+                <option key={uni.code} value={uni.code}>{uni.name}</option>
               ))}
             </select>
             <button 
