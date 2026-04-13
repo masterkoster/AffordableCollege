@@ -59,6 +59,26 @@ type AvailableUniversity = {
   name: string
 }
 
+// Michigan scholarships (2025-26)
+const scholsDB: Record<string, Record<string, number>> = {
+  'UDM': { '4.0': 14000, '3.5': 12000, '3.0': 12000, '2.5': 11000, '2.0': 6000 },
+  'WSU': { '4.0': 6500, '3.5': 6500, '3.0': 4500, '2.5': 2500, '2.0': 0 },
+  'GVSU': { '4.0': 4000, '3.5': 4000, '3.0': 2000, '2.5': 0, '2.0': 0 },
+}
+function getSchol(uni: string, gpa: string): number {
+  const t = scholsDB[uni]
+  if (!t) return 0
+  const g = parseFloat(gpa)
+  if (g >= 3.5) return t['3.5'] || t['4.0']
+  if (g >= 3.0) return t['3.0']
+  if (g >= 2.5) return t['2.5']
+  return t['2.0'] || 0
+}
+const gpaOpts = [
+  { v: '4.0', l: '4.0' }, { v: '3.5', l: '3.5+' }, { v: '3.0', l: '3.0+' },
+  { v: '2.5', l: '2.5+' }, { v: '2.0', l: '< 2.5' },
+]
+
 // Course equivalency mapping based on Michigan Transfer Network and known agreements
 // Key: CC code -> university code -> { equivalent code, equivalent name }
 const courseEquivalencies: Record<string, Record<string, { code: string; name: string } | null>> = {
@@ -767,184 +787,72 @@ function ComparisonSection({
   compareStats: any
   originSchoolName: string
 }) {
-  const maxCost = Math.max(primaryStats.totalCost, compareStats.totalCost)
-  const maxYears = Math.max(primaryStats.totalYears, compareStats.totalYears)
-  
+  const [isMI, setIsMI] = useState(true)
+  const [gpa, setGPA] = useState('3.0')
+  const pSchol = getSchol(guide.targetSchool.code.toUpperCase(), gpa)
+  const cSchol = getSchol(compareGuide.targetSchool.code.toUpperCase(), gpa)
+  const miAch = isMI ? 5500 : 0
+  const pNet = Math.max(0, primaryStats.totalCost - pSchol - miAch)
+  const cNet = Math.max(0, compareStats.totalCost - cSchol - miAch)
+  const winner = pNet < cNet ? guide.targetSchool.name : cNet < pNet ? compareGuide.targetSchool.name : null
+  const saveAmt = winner ? Math.abs(pNet - cNet) : 0
+  const maxNet = Math.max(pNet, cNet)
   return (
-    <div className="space-y-6 mb-6">
-      {/* Header */}
-      <div className="card p-6 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200">
-        <h2 className="text-xl font-bold text-slate-900 mb-4">University Comparison</h2>
-        
-        {/* Per Credit Costs - Updated to show CC vs University comparison */}
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          {/* Primary University */}
-          <div className="bg-white p-4 rounded-lg border-2 border-blue-200">
-            <p className="text-sm font-semibold text-blue-700 mb-3">{guide.targetSchool.name}</p>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-slate-600">CC ({originSchoolName})</span>
-                <span className="text-lg font-bold text-slate-900">${primaryStats.originTuition}/cr</span>
-              </div>
-              <div className="flex justify-between items-center pt-2 border-t border-slate-100">
-                <span className="text-sm text-slate-500">If taken at {guide.targetSchool.name}</span>
-                <span className="text-lg font-bold text-amber-600">${primaryStats.uniTuition}/cr</span>
-              </div>
-              <div className="flex justify-between items-center pt-2 border-t border-slate-100 bg-amber-50 -mx-4 px-4 -mb-4 pb-3 rounded-b-lg">
-                <span className="text-sm font-medium text-slate-700">Savings per credit</span>
-                <span className="text-lg font-bold text-green-600">${primaryStats.uniTuition - primaryStats.originTuition}</span>
-              </div>
-            </div>
+    <div className="space-y-4 mb-6">
+      <div className="card p-4 bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200">
+        <h2 className="text-lg font-bold text-slate-900 mb-3">University Comparison</h2>
+        <div className="flex flex-wrap gap-3 mb-4">
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">MI Resident:</span>
+            <button onClick={() => setIsMI(true)} className={`px-2 py-1 text-sm rounded ${isMI ? 'bg-green-500 text-white' : 'bg-slate-200'}`}>Yes</button>
+            <button onClick={() => setIsMI(false)} className={`px-2 py-1 text-sm rounded ${!isMI ? 'bg-slate-500 text-white' : 'bg-slate-200'}`}>No</button>
           </div>
-          
-          {/* Compare University */}
-          <div className="bg-white p-4 rounded-lg border-2 border-green-200">
-            <p className="text-sm font-semibold text-green-700 mb-3">{compareGuide.targetSchool.name}</p>
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <span className="text-sm text-slate-600">CC ({originSchoolName})</span>
-                <span className="text-lg font-bold text-slate-900">${compareStats.originTuition}/cr</span>
-              </div>
-              <div className="flex justify-between items-center pt-2 border-t border-slate-100">
-                <span className="text-sm text-slate-500">If taken at {compareGuide.targetSchool.name}</span>
-                <span className="text-lg font-bold text-amber-600">${compareStats.uniTuition}/cr</span>
-              </div>
-              <div className="flex justify-between items-center pt-2 border-t border-slate-100 bg-amber-50 -mx-4 px-4 -mb-4 pb-3 rounded-b-lg">
-                <span className="text-sm font-medium text-slate-700">Savings per credit</span>
-                <span className="text-lg font-bold text-green-600">${compareStats.uniTuition - compareStats.originTuition}</span>
-              </div>
-            </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm font-medium">GPA:</span>
+            <select value={gpa} onChange={(e) => setGPA(e.target.value)} className="text-sm border rounded px-2 py-1">
+              {gpaOpts.map(o => <option key={o.v} value={o.v}>{o.l}</option>)}
+            </select>
           </div>
         </div>
-        
-        {/* Comparison Bar Chart */}
-        <div className="mb-6">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">Total Cost Comparison</h3>
-          <div className="space-y-4">
-            {/* Primary University Bar */}
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span className="font-medium">{guide.targetSchool.name}</span>
-                <span className="font-bold text-blue-600">${primaryStats.totalCost.toLocaleString()}</span>
-              </div>
-              <div className="w-full bg-slate-200 rounded-full h-6 overflow-hidden">
-                <div 
-                  className="bg-blue-500 h-6 rounded-full flex items-center justify-end pr-2 text-white text-xs font-medium"
-                  style={{ width: `${(primaryStats.totalCost / maxCost) * 100}%` }}
-                >
-                  {((primaryStats.totalCost / maxCost) * 100).toFixed(0)}%
-                </div>
-              </div>
-            </div>
-            {/* Compare University Bar */}
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span className="font-medium">{compareGuide.targetSchool.name}</span>
-                <span className="font-bold text-green-600">${compareStats.totalCost.toLocaleString()}</span>
-              </div>
-              <div className="w-full bg-slate-200 rounded-full h-6 overflow-hidden">
-                <div 
-                  className="bg-green-500 h-6 rounded-full flex items-center justify-end pr-2 text-white text-xs font-medium"
-                  style={{ width: `${(compareStats.totalCost / maxCost) * 100}%` }}
-                >
-                  {((compareStats.totalCost / maxCost) * 100).toFixed(0)}%
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Time to Graduate Bar Chart */}
-        <div className="mb-6">
-          <h3 className="text-sm font-semibold text-slate-700 mb-3">Time to Graduate</h3>
-          <div className="space-y-4">
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span className="font-medium">{guide.targetSchool.name}</span>
-                <span className="font-bold text-slate-700">{primaryStats.totalYears.toFixed(1)} years</span>
-              </div>
-              <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
-                <div 
-                  className="bg-blue-500 h-4 rounded-full"
-                  style={{ width: `${(primaryStats.totalYears / maxYears) * 100}%` }}
-                />
-              </div>
-            </div>
-            <div>
-              <div className="flex justify-between text-sm mb-1">
-                <span className="font-medium">{compareGuide.targetSchool.name}</span>
-                <span className="font-bold text-slate-700">{compareStats.totalYears.toFixed(1)} years</span>
-              </div>
-              <div className="w-full bg-slate-200 rounded-full h-4 overflow-hidden">
-                <div 
-                  className="bg-green-500 h-4 rounded-full"
-                  style={{ width: `${(compareStats.totalYears / maxYears) * 100}%` }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Detailed Stats Table */}
         <div className="overflow-hidden rounded-lg border border-green-200">
           <table className="w-full text-sm">
             <thead className="bg-green-100">
               <tr>
-                <th className="px-4 py-2 text-left font-semibold text-slate-700">Metric</th>
-                <th className="px-4 py-2 text-right font-semibold text-blue-700">{guide.targetSchool.name}</th>
-                <th className="px-4 py-2 text-right font-semibold text-green-700">{compareGuide.targetSchool.name}</th>
+                <th className="px-3 py-2 text-left"></th>
+                <th className="px-3 py-2 text-right text-blue-700">{guide.targetSchool.name}</th>
+                <th className="px-3 py-2 text-right text-green-700">{compareGuide.targetSchool.name}</th>
               </tr>
             </thead>
             <tbody>
               <tr className="border-t border-green-200">
-                <td className="px-4 py-2 text-slate-600">Transfer Credits</td>
-                <td className="px-4 py-2 text-right font-medium">{primaryStats.totalCredits}</td>
-                <td className="px-4 py-2 text-right font-medium">{compareStats.totalCredits}</td>
+                <td className="px-3 py-2">Est. Tuition</td>
+                <td className="px-3 py-2 text-right">${primaryStats.totalCost.toLocaleString()}</td>
+                <td className="px-3 py-2 text-right">${compareStats.totalCost.toLocaleString()}</td>
               </tr>
               <tr className="border-t border-green-200 bg-green-50/50">
-                <td className="px-4 py-2 text-slate-600">CC Tuition (actual paid)</td>
-                <td className="px-4 py-2 text-right font-medium">${primaryStats.ccCost.toLocaleString()}</td>
-                <td className="px-4 py-2 text-right font-medium">${compareStats.ccCost.toLocaleString()}</td>
+                <td className="px-3 py-2">Less: Scholarships{isMI && <span className="text-xs text-green-600 block">+ MI Achieve</span>}</td>
+                <td className="px-3 py-2 text-right text-green-600">-${(pSchol + miAch).toLocaleString()}</td>
+                <td className="px-3 py-2 text-right text-green-600">-${(cSchol + miAch).toLocaleString()}</td>
               </tr>
-              <tr className="border-t border-green-200">
-                <td className="px-4 py-2 text-slate-600">If taken at university instead</td>
-                <td className="px-4 py-2 text-right font-medium text-amber-600">${primaryStats.uniCost.toLocaleString()}</td>
-                <td className="px-4 py-2 text-right font-medium text-amber-600">${compareStats.uniCost.toLocaleString()}</td>
-              </tr>
-              <tr className="border-t border-green-200 bg-green-50/50">
-                <td className="px-4 py-2 text-slate-600">Remaining at University</td>
-                <td className="px-4 py-2 text-right font-medium">{primaryStats.remainingCredits} credits</td>
-                <td className="px-4 py-2 text-right font-medium">{compareStats.remainingCredits} credits</td>
-              </tr>
-              <tr className="border-t border-green-200">
-                <td className="px-4 py-2 text-slate-600">Time to Graduate</td>
-                <td className="px-4 py-2 text-right font-medium">{primaryStats.totalYears.toFixed(1)} years</td>
-                <td className="px-4 py-2 text-right font-medium">{compareStats.totalYears.toFixed(1)} years</td>
-              </tr>
-              <tr className="border-t border-green-200 bg-green-100">
-                <td className="px-4 py-2 text-slate-700 font-semibold">Est. Total Cost (CC + remaining)</td>
-                <td className="px-4 py-2 text-right font-bold text-blue-700">${primaryStats.totalCost.toLocaleString()}</td>
-                <td className="px-4 py-2 text-right font-bold text-green-700">${compareStats.totalCost.toLocaleString()}</td>
+              <tr className="border-t border-green-200 bg-green-100 font-bold">
+                <td className="px-3 py-2">YOUR NET COST</td>
+                <td className="px-3 py-2 text-right text-blue-700 text-lg">${pNet.toLocaleString()}</td>
+                <td className="px-3 py-2 text-right text-green-700 text-lg">${cNet.toLocaleString()}</td>
               </tr>
             </tbody>
           </table>
         </div>
-        
-        {/* Savings Highlight */}
-        {compareStats.totalCost < primaryStats.totalCost && (
-          <div className="mt-4 p-4 bg-green-100 rounded-lg text-center">
-            <p className="text-green-700 font-bold text-lg">
-              Save ${(primaryStats.totalCost - compareStats.totalCost).toLocaleString()} by choosing {compareGuide.targetSchool.name}!
-            </p>
-          </div>
-        )}
-        {primaryStats.totalCost < compareStats.totalCost && (
-          <div className="mt-4 p-4 bg-blue-100 rounded-lg text-center">
-            <p className="text-blue-700 font-bold text-lg">
-              Save ${(compareStats.totalCost - primaryStats.totalCost).toLocaleString()} by choosing {guide.targetSchool.name}!
-            </p>
-          </div>
-        )}
+        <div className="mt-4">
+          <div className="text-xs text-slate-500 mb-1">Net Cost (after scholarships)</div>
+          <div className="flex justify-between text-sm mb-1"><span className="font-medium">{guide.targetSchool.name}</span><span className="font-bold text-blue-600">${pNet.toLocaleString()}</span></div>
+          <div className="w-full bg-slate-200 rounded-full h-4 mb-2"><div className="bg-blue-500 h-4 rounded-full" style={{width: maxNet > 0 ? `${(pNet/maxNet)*100}%` : '0%'}} /></div>
+          <div className="flex justify-between text-sm mb-1"><span className="font-medium">{compareGuide.targetSchool.name}</span><span className="font-bold text-green-600">${cNet.toLocaleString()}</span></div>
+          <div className="w-full bg-slate-200 rounded-full h-4"><div className="bg-green-500 h-4 rounded-full" style={{width: maxNet > 0 ? `${(cNet/maxNet)*100}%` : '0%'}} /></div>
+        </div>
+        <div className="mt-4 flex items-center justify-between text-sm bg-white/60 rounded px-3 py-2">
+          <span className="text-slate-600">Grad: {primaryStats.totalYears.toFixed(1)}yr vs {compareStats.totalYears.toFixed(1)}yr</span>
+          {winner && saveAmt > 0 && <span className="text-green-700 font-bold">💰 Save ${saveAmt.toLocaleString()} at {winner}</span>}
+        </div>
       </div>
     </div>
   )

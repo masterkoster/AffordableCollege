@@ -14,7 +14,7 @@ async function main() {
   })
 
   // Community Colleges with tuition costs per credit hour (2025-2026)
-  const cc = [
+  const cc: any[] = [
     { code: 'OCC', name: 'Oakland Community College', type: 'CC', inStatePerCredit: 211, outStatePerCredit: 211, internationalPerCredit: 211, avgTimeToGraduate: 2.5 },
     { code: 'Macomb', name: 'Macomb Community College', type: 'CC', inStatePerCredit: 113, outStatePerCredit: 270, internationalPerCredit: 270, avgTimeToGraduate: 2.5 },
     { code: 'Schoolcraft', name: 'Schoolcraft College', type: 'CC', inStatePerCredit: 250, outStatePerCredit: 250, internationalPerCredit: 250, avgTimeToGraduate: 2.5 },
@@ -24,7 +24,7 @@ async function main() {
   // Universities with tuition costs per credit hour (2025-2026 academic year)
   // Note: Michigan public universities charge in-state rates to all students (no separate out-of-state)
   // International students pay higher rates
-  const univ = [
+  const univ: any[] = [
     { code: 'OU', name: 'Oakland University', type: 'UNIVERSITY', inStatePerCredit: 552.50, outStatePerCredit: 795.75, internationalPerCredit: 795.75, ranking: 298, totalStudents: 16000, acceptanceRate: 78, description: 'Public research university in Rochester, Michigan known for engineering, business, and health sciences programs.', avgTimeToGraduate: 2.0 },
     { code: 'WSU', name: 'Wayne State University', type: 'UNIVERSITY', inStatePerCredit: 567.27, outStatePerCredit: 1299.29, internationalPerCredit: 1299.29, ranking: 205, totalStudents: 24000, acceptanceRate: 70, description: 'Urban research university in Detroit with strong programs in medicine, engineering, and business.', avgTimeToGraduate: 2.0 },
     { code: 'EMU', name: 'Eastern Michigan University', type: 'UNIVERSITY', inStatePerCredit: 700.00, outStatePerCredit: 700.00, internationalPerCredit: 700.00, ranking: 280, totalStudents: 14000, acceptanceRate: 74, description: 'Public university in Ypsilanti known for education, business, and health programs.', avgTimeToGraduate: 2.0 },
@@ -56,12 +56,22 @@ async function main() {
   }
   console.log('Schools created')
 
-  // Majors
+  // Majors - STEM focused
   const majors = [
     { code: 'CS', name: 'Computer Science' },
     { code: 'ENG', name: 'Engineering' },
     { code: 'BUS', name: 'Business Administration' },
     { code: 'BIO', name: 'Biology' },
+    // New STEM majors
+    { code: 'CYB', name: 'Cybersecurity' },
+    { code: 'DATA', name: 'Data Science' },
+    { code: 'EE', name: 'Electrical Engineering' },
+    { code: 'ME', name: 'Mechanical Engineering' },
+    { code: 'IT', name: 'Information Technology' },
+    { code: 'NURS', name: 'Nursing' },
+    { code: 'MATH', name: 'Mathematics' },
+    { code: 'CHEM', name: 'Chemistry' },
+    { code: 'PHYS', name: 'Physics' },
   ]
   const majorIds: any = {}
   for (const m of majors) {
@@ -416,6 +426,168 @@ async function main() {
       { c: 'ECON 222', n: 'Principles of Microeconomics', cr: 4 },
       { c: 'BUSN 261', n: 'Business Law I', cr: 3 },
       { c: 'ENGL 102', n: 'Composition II', cr: 3 },
+    ] },
+    // New STEM Majors - Cybersecurity
+    { o: 'Macomb', t: 'WSU', m: 'CYB', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'ITCS 1140', n: 'Problem Solving with Python', cr: 3 },
+      { c: 'ITCS 1170', n: 'Object-Oriented Programming', cr: 4 },
+      { c: 'ITCS 2250', n: 'Data Structures', cr: 4 },
+      { c: 'ITCS 2530', n: 'Computer Systems', cr: 4 },
+      { c: 'MATH 150', n: 'Statistics', cr: 4 },
+      { c: 'MATH 1760', n: 'Calculus I', cr: 4 },
+      { c: 'MATH 1770', n: 'Calculus II', cr: 4 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'ENGL 1181', n: 'Composition I', cr: 3 },
+      { c: 'ENGL 1190', n: 'Composition II', cr: 3 },
+    ] },
+    { o: 'OCC', t: 'OU', m: 'CYB', r: 'GPA >= 2.5', a: 2.8, c: [
+      { c: 'CIS 1500', n: 'Intro to Computing', cr: 3 },
+      { c: 'CIS 2252', n: 'Data Structures', cr: 4 },
+      { c: 'CIS 2353', n: 'Algorithms', cr: 3 },
+      { c: 'MAT 1730', n: 'Calculus I', cr: 4 },
+      { c: 'MAT 1740', n: 'Calculus II', cr: 4 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'ENG 131', n: 'Composition I', cr: 3 },
+      { c: 'ENG 132', n: 'Composition II', cr: 3 },
+    ] },
+    // Data Science
+    { o: 'Macomb', t: 'WSU', m: 'DATA', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'ITCS 1140', n: 'Python Programming', cr: 3 },
+      { c: 'ITCS 1170', n: 'Object-Oriented Programming', cr: 4 },
+      { c: 'MATH 150', n: 'Statistics', cr: 4 },
+      { c: 'MATH 1760', n: 'Calculus I', cr: 4 },
+      { c: 'MATH 1770', n: 'Calculus II', cr: 4 },
+      { c: 'MATH 2200', n: 'Discrete Math', cr: 4 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'ENGL 1181', n: 'Composition I', cr: 3 },
+      { c: 'ENGL 1190', n: 'Composition II', cr: 3 },
+    ] },
+    { o: 'OCC', t: 'GVSU', m: 'DATA', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'CIS 1500', n: 'Intro to Computing', cr: 3 },
+      { c: 'MAT 1730', n: 'Calculus I', cr: 4 },
+      { c: 'MAT 1740', n: 'Calculus II', cr: 4 },
+      { c: 'STA 2200', n: 'Statistics', cr: 4 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'ENG 131', n: 'Composition I', cr: 3 },
+      { c: 'ENG 132', n: 'Composition II', cr: 3 },
+    ] },
+    // Electrical Engineering
+    { o: 'Macomb', t: 'OU', m: 'EE', r: 'GPA >= 2.5', a: 2.8, c: [
+      { c: 'MATH 1760', n: 'Calculus I', cr: 4 },
+      { c: 'MATH 1770', n: 'Calculus II', cr: 4 },
+      { c: 'MATH 2000', n: 'Linear Algebra', cr: 3 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'PHYS 2230', n: 'Physics II', cr: 4 },
+      { c: 'CHEM 1170', n: 'General Chemistry I', cr: 4 },
+      { c: 'EGR 1100', n: 'Engineering Fundamentals', cr: 3 },
+      { c: 'ENGL 1181', n: 'Composition I', cr: 3 },
+      { c: 'ENGL 1190', n: 'Composition II', cr: 3 },
+    ] },
+    { o: 'OCC', t: 'WMU', m: 'EE', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'MAT 1730', n: 'Calculus I', cr: 4 },
+      { c: 'MAT 1740', n: 'Calculus II', cr: 4 },
+      { c: 'MATH 2760', n: 'Multivariable Calculus', cr: 4 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'PHYS 2230', n: 'Physics II', cr: 4 },
+      { c: 'CHEM 1170', n: 'General Chemistry I', cr: 4 },
+      { c: 'EGR 1100', n: 'Engineering Fundamentals', cr: 3 },
+      { c: 'ENG 131', n: 'Composition I', cr: 3 },
+      { c: 'ENG 132', n: 'Composition II', cr: 3 },
+    ] },
+    // Mechanical Engineering
+    { o: 'Macomb', t: 'OU', m: 'ME', r: 'GPA >= 2.5', a: 2.8, c: [
+      { c: 'MATH 1760', n: 'Calculus I', cr: 4 },
+      { c: 'MATH 1770', n: 'Calculus II', cr: 4 },
+      { c: 'MATH 2000', n: 'Linear Algebra', cr: 3 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'PHYS 2230', n: 'Physics II', cr: 4 },
+      { c: 'CHEM 1170', n: 'General Chemistry I', cr: 4 },
+      { c: 'EGR 1100', n: 'Engineering Fundamentals', cr: 3 },
+      { c: 'ENGL 1181', n: 'Composition I', cr: 3 },
+      { c: 'ENGL 1190', n: 'Composition II', cr: 3 },
+    ] },
+    { o: 'OCC', t: 'GVSU', m: 'ME', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'MAT 1730', n: 'Calculus I', cr: 4 },
+      { c: 'MAT 1740', n: 'Calculus II', cr: 4 },
+      { c: 'MATH 2760', n: 'Multivariable Calculus', cr: 4 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'PHYS 2230', n: 'Physics II', cr: 4 },
+      { c: 'EGR 1100', n: 'Engineering Fundamentals', cr: 3 },
+      { c: 'ENG 131', n: 'Composition I', cr: 3 },
+      { c: 'ENG 132', n: 'Composition II', cr: 3 },
+    ] },
+    // Information Technology
+    { o: 'Macomb', t: 'WMU', m: 'IT', r: 'GPA >= 2.0', a: 2.0, c: [
+      { c: 'ITCS 1140', n: 'Programming', cr: 3 },
+      { c: 'ITCS 1170', n: 'Object-Oriented Programming', cr: 4 },
+      { c: 'ITCS 2250', n: 'Data Structures', cr: 4 },
+      { c: 'ITCS 2530', n: 'Computer Systems', cr: 4 },
+      { c: 'MATH 150', n: 'Statistics', cr: 4 },
+      { c: 'MATH 1760', n: 'Calculus I', cr: 4 },
+      { c: 'ENGL 1181', n: 'Composition I', cr: 3 },
+      { c: 'ENGL 1190', n: 'Composition II', cr: 3 },
+    ] },
+    { o: 'HenryFord', t: 'OU', m: 'IT', r: 'GPA >= 2.5', a: 2.8, c: [
+      { c: 'CIS 170', n: 'Programming II', cr: 3 },
+      { c: 'MATH 180', n: 'Calculus I', cr: 5 },
+      { c: 'MATH 141', n: 'Statistics', cr: 3 },
+      { c: 'ENG 131', n: 'Composition I', cr: 3 },
+      { c: 'ENG 132', n: 'Composition II', cr: 3 },
+    ] },
+    // Mathematics
+    { o: 'OCC', t: 'WSU', m: 'MATH', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'MAT 1730', n: 'Calculus I', cr: 4 },
+      { c: 'MAT 1740', n: 'Calculus II', cr: 4 },
+      { c: 'MATH 2200', n: 'Discrete Mathematics', cr: 4 },
+      { c: 'STA 2200', n: 'Statistics', cr: 4 },
+      { c: 'ENG 131', n: 'Composition I', cr: 3 },
+      { c: 'ENG 132', n: 'Composition II', cr: 3 },
+    ] },
+    { o: 'Macomb', t: 'GVSU', m: 'MATH', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'MATH 1760', n: 'Calculus I', cr: 4 },
+      { c: 'MATH 1770', n: 'Calculus II', cr: 4 },
+      { c: 'MATH 2000', n: 'Linear Algebra', cr: 3 },
+      { c: 'MATH 2200', n: 'Discrete Math', cr: 4 },
+      { c: 'ENGL 1181', n: 'Composition I', cr: 3 },
+      { c: 'ENGL 1190', n: 'Composition II', cr: 3 },
+    ] },
+    // Chemistry
+    { o: 'OCC', t: 'WSU', m: 'CHEM', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'CHEM 1170', n: 'General Chemistry I', cr: 4 },
+      { c: 'CHEM 1180', n: 'General Chemistry II', cr: 4 },
+      { c: 'MAT 1730', n: 'Calculus I', cr: 4 },
+      { c: 'MAT 1740', n: 'Calculus II', cr: 4 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'ENG 131', n: 'Composition I', cr: 3 },
+      { c: 'ENG 132', n: 'Composition II', cr: 3 },
+    ] },
+    { o: 'Macomb', t: 'OU', m: 'CHEM', r: 'GPA >= 2.5', a: 2.8, c: [
+      { c: 'CHEM 1170', n: 'General Chemistry I', cr: 4 },
+      { c: 'CHEM 1180', n: 'General Chemistry II', cr: 4 },
+      { c: 'MATH 1760', n: 'Calculus I', cr: 4 },
+      { c: 'MATH 1770', n: 'Calculus II', cr: 4 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'ENGL 1181', n: 'Composition I', cr: 3 },
+      { c: 'ENGL 1190', n: 'Composition II', cr: 3 },
+    ] },
+    // Physics
+    { o: 'OCC', t: 'EMU', m: 'PHYS', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'MAT 1730', n: 'Calculus I', cr: 4 },
+      { c: 'MAT 1740', n: 'Calculus II', cr: 4 },
+      { c: 'MATH 2760', n: 'Multivariable Calculus', cr: 4 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'PHYS 2230', n: 'Physics II', cr: 4 },
+      { c: 'ENG 131', n: 'Composition I', cr: 3 },
+      { c: 'ENG 132', n: 'Composition II', cr: 3 },
+    ] },
+    { o: 'Macomb', t: 'WMU', m: 'PHYS', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'MATH 1760', n: 'Calculus I', cr: 4 },
+      { c: 'MATH 1770', n: 'Calculus II', cr: 4 },
+      { c: 'MATH 2760', n: 'Multivariable Calculus', cr: 4 },
+      { c: 'PHYS 2220', n: 'Physics I', cr: 4 },
+      { c: 'PHYS 2230', n: 'Physics II', cr: 4 },
+      { c: 'ENGL 1181', n: 'Composition I', cr: 3 },
+      { c: 'ENGL 1190', n: 'Composition II', cr: 3 },
     ] },
   ]
 
