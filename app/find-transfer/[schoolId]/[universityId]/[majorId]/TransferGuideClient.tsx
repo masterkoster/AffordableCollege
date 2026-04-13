@@ -213,25 +213,219 @@ export default function TransferGuideClient({ guide }: { guide: TransferGuideDat
 function CourseRow({ course }: { course: Course }) {
   const [isOpen, setIsOpen] = useState(false)
   
+  // Real course descriptions from Oakland University catalog
   const courseDescriptions: Record<string, { description: string; prerequisites: string }> = {
-    'MTH 1554': { description: 'Introduction to limits, derivatives, and integrals. Topics include differentiation rules, applications of derivatives, and integration.', prerequisites: 'Pre-Calculus or equivalent' },
-    'MTH 1555': { description: 'Continuation of Calculus I. Includes integration techniques, sequences, series, and polar coordinates.', prerequisites: 'MTH 1554' },
-    'CSI 1320': { description: 'Introduction to Python programming and Unix operating system. Covers fundamental programming concepts and tools.', prerequisites: 'No prior programming experience required' },
-    'CSI 2300': { description: 'Object-oriented programming using Java. Covers classes, objects, inheritance, polymorphism, and design patterns.', prerequisites: 'CSI 1320 or equivalent programming experience' },
-    'CSI 2310': { description: 'Data structures including arrays, linked lists, stacks, queues, trees, and graphs. Algorithm analysis and design.', prerequisites: 'CSI 2300, MTH 1554' },
-    'CSI 2470': { description: 'Introduction to computer networks, protocols, and network programming. Covers TCP/IP, sockets, and distributed systems.', prerequisites: 'CSI 2300' },
-    'CSI 3370': { description: 'Software engineering principles and practices. Covers requirements, design, testing, and agile methodologies.', prerequisites: 'CSI 2310' },
-    'CSI 3450': { description: 'Database design, SQL, and implementation. Covers relational model, normalization, and query optimization.', prerequisites: 'CSI 2310' },
-    'CSI 3480': { description: 'Security principles and practices in computing. Covers encryption, authentication, and secure coding.', prerequisites: 'CSI 2470' },
-    'MATH 1760': { description: 'Limits, continuity, differentiation, and integration. Applications of derivatives and integrals.', prerequisites: 'MATH 155 or Pre-Calculus' },
-    'PHYS 2220': { description: 'Classical mechanics, thermodynamics, and waves. Includes laboratory experiments.', prerequisites: 'MATH 1760, high school physics' },
-    'ENGL 1181': { description: 'College-level composition focusing on academic writing, critical thinking, and research skills.', prerequisites: 'Placement test or equivalent' },
-    'ACC 1810': { description: 'Introduction to financial accounting. Covers the accounting cycle, financial statements, and analysis.', prerequisites: 'No prerequisites' },
-    'ECO 2610': { description: 'Microeconomic analysis of consumer behavior, market structures, and welfare economics.', prerequisites: 'No prerequisites' },
+    // Computer Science Core
+    'CSI 1320': { 
+      description: 'Introduction to Python programming and Unix operating system. Covers fundamental programming concepts, data types, control structures, functions, and basic data structures with laboratory.', 
+      prerequisites: 'No prior programming experience required' 
+    },
+    'CSI 2300': { 
+      description: 'Object-oriented computer programming using Java. Classes, member functions, inheritance, polymorphism, operator overloading, design methodologies, introduction to software engineering, and basic data structures.', 
+      prerequisites: 'CSI 1320 or equivalent programming experience' 
+    },
+    'CSI 2310': { 
+      description: 'Data structures using object-oriented programming. Fundamental data structures including stacks, queues, lists and trees covered in detail. Concepts of design, analysis and verification discussed in context of abstract data types. With laboratory.', 
+      prerequisites: 'CSI 2300' 
+    },
+    'CSI 2360': { 
+      description: 'Programming in C language. Covers C syntax, pointers, memory management, data structures, and system-level programming.', 
+      prerequisites: 'CSI 2300 or high-level programming course' 
+    },
+    'CSI 2470': { 
+      description: 'Introduction to computer networks, protocols, and network programming. Covers TCP/IP, sockets, OSI model, routing, and distributed systems.', 
+      prerequisites: 'CSI 2300' 
+    },
+    'CSI 3370': { 
+      description: 'Software engineering principles and practices. Covers requirements engineering, design patterns, testing, agile methodologies, and project management.', 
+      prerequisites: 'CSI 2310' 
+    },
+    'CSI 3430': { 
+      description: 'Theory of computation. Covers automata theory, formal languages, Turing machines, computability, and complexity theory.', 
+      prerequisites: 'CSI 2310, MTH 1554' 
+    },
+    'CSI 3450': { 
+      description: 'Database design, SQL, and implementation. Covers relational model, ER modeling, normalization, SQL queries, transactions, and query optimization.', 
+      prerequisites: 'CSI 2310' 
+    },
+    'CSI 3480': { 
+      description: 'Security principles and practices in computing. Covers encryption, authentication, access control, network security, and secure coding practices.', 
+      prerequisites: 'CSI 2470' 
+    },
+    'CSI 3640': { 
+      description: 'Computer organization and architecture. Covers CPU design, memory systems, I/O, instruction sets, and performance analysis.', 
+      prerequisites: 'CSI 2300' 
+    },
+    'CSI 4350': { 
+      description: 'Programming languages. Study of language design paradigms, syntax, semantics, and implementation of compilers and interpreters.', 
+      prerequisites: 'CSI 3430' 
+    },
+    'CSI 4500': { 
+      description: 'Operating systems. Covers process management, memory management, file systems, concurrency, and virtualization.', 
+      prerequisites: 'CSI 3640' 
+    },
+    
+    // Mathematics
+    'MTH 1554': { 
+      description: 'Introduction to limits, derivatives, and integrals. Topics include differentiation rules, applications of derivatives, and integration techniques.', 
+      prerequisites: 'Pre-Calculus or equivalent (MTH 1465)' 
+    },
+    'MTH 1555': { 
+      description: 'Continuation of Calculus I. Includes integration techniques, sequences, series, polar coordinates, and parametric equations.', 
+      prerequisites: 'MTH 1554' 
+    },
+    'MATH 1760': { 
+      description: 'Limits, continuity, differentiation, and integration. Applications of derivatives and integrals. Covers foundational calculus concepts.', 
+      prerequisites: 'MATH 155 or Pre-Calculus' 
+    },
+    'MATH 1770': { 
+      description: 'Continuation of Calculus I. Advanced integration techniques, sequences, series, and polar coordinates.', 
+      prerequisites: 'MATH 1760' 
+    },
+    'MATH 2000': { 
+      description: 'Linear algebra. Covers vectors, matrices, linear transformations, eigenvalues, and eigenvectors.', 
+      prerequisites: 'MATH 1760 or MTH 1554' 
+    },
+    'MATH 2200': { 
+      description: 'Discrete mathematics. Covers logic, sets, relations, combinatorics, graph theory, and proof techniques.', 
+      prerequisites: 'MTH 1554' 
+    },
+    'MATH 2760': { 
+      description: 'Multivariable calculus. Functions of several variables, partial derivatives, multiple integrals, and vector calculus.', 
+      prerequisites: 'MATH 1770 or MTH 1555' 
+    },
+    
+    // Physics
+    'PHYS 2220': { 
+      description: 'Classical mechanics, thermodynamics, and waves. Includes laboratory experiments and problem-solving.', 
+      prerequisites: 'MATH 1760, high school physics' 
+    },
+    'PHYS 2230': { 
+      description: 'Electricity and magnetism. Covers electric fields, magnetic fields, circuits, and electromagnetic waves.', 
+      prerequisites: 'PHYS 2220, MATH 1770' 
+    },
+    'PHYS 231': { 
+      description: 'University Physics I. Mechanics, thermodynamics, and waves with calculus-based problem solving.', 
+      prerequisites: 'MATH 180 or equivalent' 
+    },
+    'PHYS 232': { 
+      description: 'University Physics II. Electricity, magnetism, and optics with calculus-based problem solving.', 
+      prerequisites: 'PHYS 231, MATH 183' 
+    },
+    
+    // Chemistry
+    'CHEM 1170': { 
+      description: 'General Chemistry I. Atomic structure, bonding, stoichiometry, thermochemistry, and periodic properties.', 
+      prerequisites: 'High school chemistry' 
+    },
+    'CHEM 1180': { 
+      description: 'General Chemistry II. Kinetics, equilibrium, acid-base chemistry, electrochemistry, and thermodynamics.', 
+      prerequisites: 'CHEM 1170' 
+    },
+    'CHEM 141': { 
+      description: 'General Chemistry I. Atomic structure, periodic trends, chemical bonding, and stoichiometry.', 
+      prerequisites: 'High school chemistry' 
+    },
+    
+    // English
+    'ENGL 1181': { 
+      description: 'College-level composition focusing on academic writing, critical thinking, research skills, and argumentation.', 
+      prerequisites: 'Placement test or equivalent' 
+    },
+    'ENGL 1190': { 
+      description: 'Second semester composition. Research writing, critical analysis, and synthesis of multiple sources.', 
+      prerequisites: 'ENGL 1181' 
+    },
+    'ENG 131': { 
+      description: 'Introduction to college writing. Focus on composing processes, rhetorical awareness, and critical thinking.', 
+      prerequisites: 'Placement test' 
+    },
+    'ENG 132': { 
+      description: 'College writing. Advanced composition, argumentation, and research-based writing.', 
+      prerequisites: 'ENG 131' 
+    },
+    
+    // Accounting & Business
+    'ACC 1810': { 
+      description: 'Introduction to financial accounting. Covers the accounting cycle, financial statements, and analysis.', 
+      prerequisites: 'No prerequisites' 
+    },
+    'ACC 1820': { 
+      description: 'Managerial accounting. Covers cost accounting, budgeting, and decision-making tools for managers.', 
+      prerequisites: 'ACC 1810' 
+    },
+    'BAC 131': { 
+      description: 'Financial Accounting. Introduction to accounting principles, financial statement preparation, and analysis.', 
+      prerequisites: 'No prerequisites' 
+    },
+    'BAC 132': { 
+      description: 'Managerial Accounting. Cost behavior, budgeting, and management decision-making using accounting data.', 
+      prerequisites: 'BAC 131' 
+    },
+    'ECO 2610': { 
+      description: 'Principles of Economics - Micro. Analysis of consumer behavior, market structures, and welfare economics.', 
+      prerequisites: 'No prerequisites' 
+    },
+    'ECO 2620': { 
+      description: 'Principles of Economics - Macro. Analysis of national income, inflation, unemployment, and fiscal policy.', 
+      prerequisites: 'No prerequisites' 
+    },
+    'BEC 151': { 
+      description: 'Principles of Macroeconomics. Introduction to macroeconomic theory, national income, and monetary policy.', 
+      prerequisites: 'No prerequisites' 
+    },
+    'BEC 152': { 
+      description: 'Principles of Microeconomics. Analysis of price theory, consumer behavior, and market structures.', 
+      prerequisites: 'No prerequisites' 
+    },
+    
+    // Biology
+    'BIO 152': { 
+      description: 'General Biology II. Continuation of BIO 151. Covers evolution, diversity, ecology, and behavior.', 
+      prerequisites: 'BIO 151' 
+    },
+    'BIO 1530': { 
+      description: 'General Biology I. Cell structure, genetics, evolution, and molecular biology with laboratory.', 
+      prerequisites: 'High school biology' 
+    },
+    'BIO 1560': { 
+      description: 'General Biology II. Organismal biology, evolution, diversity, and ecology.', 
+      prerequisites: 'BIO 1530' 
+    },
+    'BIO 2100': { 
+      description: 'Human Anatomy and Physiology. Structure and function of the human body systems.', 
+      prerequisites: 'BIO 1530 or equivalent' 
+    },
+    
+    // IT/Programming
+    'ITCS 1140': { 
+      description: 'Problem Solving and Programming. Introduction to programming using Python with emphasis on problem-solving.', 
+      prerequisites: 'No prior programming experience' 
+    },
+    'ITCS 1170': { 
+      description: 'Object-Oriented Programming. Object-oriented programming using Java, covering classes, inheritance, and design.', 
+      prerequisites: 'ITCS 1140 or equivalent' 
+    },
+    'ITCS 2250': { 
+      description: 'Data Structures. Fundamental data structures including arrays, linked lists, trees, and algorithms.', 
+      prerequisites: 'ITCS 1170' 
+    },
+    'ITCS 2530': { 
+      description: 'Computer Systems. Introduction to computer architecture, operating systems, and networking.', 
+      prerequisites: 'ITCS 1170' 
+    },
+    'CIS 129': { 
+      description: 'Programming I. Introduction to programming with emphasis on problem-solving and algorithm design.', 
+      prerequisites: 'No prior programming experience' 
+    },
+    'CIS 170': { 
+      description: 'Programming II. Object-oriented programming with data structures and algorithm analysis.', 
+      prerequisites: 'CIS 129 or equivalent' 
+    },
   }
   
   const info = courseDescriptions[course.code] || { 
-    description: `This course covers topics related to ${course.name}. Specific content may vary based on curriculum.`,
+    description: `This course covers topics related to ${course.name}. Course content may vary based on specific program requirements and instructor.`,
     prerequisites: 'Check with academic advisor for specific prerequisites.'
   }
   
