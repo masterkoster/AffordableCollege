@@ -715,19 +715,19 @@ function ComparisonSection({
                 <td className="px-4 py-2 text-right font-medium">{compareStats.totalCredits}</td>
               </tr>
               <tr className="border-t border-green-200 bg-green-50/50">
-                <td className="px-4 py-2 text-slate-600">CC Cost (transferred)</td>
+                <td className="px-4 py-2 text-slate-600">CC Tuition (actual paid)</td>
                 <td className="px-4 py-2 text-right font-medium">${primaryStats.ccCost.toLocaleString()}</td>
                 <td className="px-4 py-2 text-right font-medium">${compareStats.ccCost.toLocaleString()}</td>
               </tr>
               <tr className="border-t border-green-200">
+                <td className="px-4 py-2 text-slate-600">If taken at university instead</td>
+                <td className="px-4 py-2 text-right font-medium text-amber-600">${primaryStats.uniCost.toLocaleString()}</td>
+                <td className="px-4 py-2 text-right font-medium text-amber-600">${compareStats.uniCost.toLocaleString()}</td>
+              </tr>
+              <tr className="border-t border-green-200 bg-green-50/50">
                 <td className="px-4 py-2 text-slate-600">Remaining at University</td>
                 <td className="px-4 py-2 text-right font-medium">{primaryStats.remainingCredits} credits</td>
                 <td className="px-4 py-2 text-right font-medium">{compareStats.remainingCredits} credits</td>
-              </tr>
-              <tr className="border-t border-green-200 bg-green-50/50">
-                <td className="px-4 py-2 text-slate-600">University Cost</td>
-                <td className="px-4 py-2 text-right font-medium">${(primaryStats.uniCost + primaryStats.remainingCost).toLocaleString()}</td>
-                <td className="px-4 py-2 text-right font-medium">${(compareStats.uniCost + compareStats.remainingCost).toLocaleString()}</td>
               </tr>
               <tr className="border-t border-green-200">
                 <td className="px-4 py-2 text-slate-600">Time to Graduate</td>
@@ -735,7 +735,7 @@ function ComparisonSection({
                 <td className="px-4 py-2 text-right font-medium">{compareStats.totalYears.toFixed(1)} years</td>
               </tr>
               <tr className="border-t border-green-200 bg-green-100">
-                <td className="px-4 py-2 text-slate-700 font-semibold">Est. Total Cost</td>
+                <td className="px-4 py-2 text-slate-700 font-semibold">Est. Total Cost (CC + remaining)</td>
                 <td className="px-4 py-2 text-right font-bold text-blue-700">${primaryStats.totalCost.toLocaleString()}</td>
                 <td className="px-4 py-2 text-right font-bold text-green-700">${compareStats.totalCost.toLocaleString()}</td>
               </tr>
@@ -768,12 +768,12 @@ function calculateStats(guideData: TransferGuideData | CompareGuideData, originT
   const totalCredits = guideData.courses.reduce((sum, c) => sum + c.credits, 0)
   const ccCost = totalCredits * originTuition
   const uniTuition = guideData.targetSchool.inStatePerCredit ?? 500
-  const uniCost = totalCredits * uniTuition
+  const uniCost = totalCredits * uniTuition // What those same CC courses would cost at university
   const remainingCredits = (guideData.totalCredits ?? 128) - totalCredits
   const remainingCost = remainingCredits * uniTuition
   
-  // Time to graduate estimation: 14 credits/semester, 2 semesters/year
-  const creditsPerSemester = 14
+  // Time to graduate estimation: 16 credits/semester, 2 semesters/year (Fall + Winter = 32/year)
+  const creditsPerSemester = 16
   const semestersPerYear = 2
   const ccSemesters = Math.ceil(totalCredits / creditsPerSemester)
   const uniSemesters = Math.ceil(remainingCredits / creditsPerSemester)
