@@ -345,6 +345,52 @@ function calculateGradDate(startSemester: string, years: number): string {
   return 'N/A'
 }
 
+// Distribute courses into semesters (16 credits per semester typical)
+function distributeIntoSemesters(courses: Course[], startSemester: string): { semester: string; year: number; courses: Course[]; credits: number }[] {
+  const [startSeason, startYearStr] = startSemester.split(' ')
+  let startYear = parseInt(startYearStr)
+  let currentSeason = startSeason === 'Fall' ? 'Fall' : 'Spring'
+  let currentYear = startYear
+  
+  const creditsPerSemester = 16
+  const result: { semester: string; year: number; courses: Course[]; credits: number }[] = []
+  let currentSemester: Course[] = []
+  let currentCredits = 0
+  
+  // Sort courses - prioritize math, then CS, then gen ed
+  const priorityOrder = ['MATH', 'MAT', 'CS', 'CIS', 'ITCS', 'ENG', 'ENGL', 'COM', 'PHYS', 'CHEM', 'BIO']
+  const sortedCourses = [...courses].sort((a, b) => {
+    const aPriority = priorityOrder.findIndex(p => a.code.startsWith(p))
+    const bPriority = priorityOrder.findIndex(p => b.code.startsWith(p))
+    if (aPriority !== -1 && bPriority === -1) return -1
+    if (aPriority === -1 && bPriority !== -1) return 1
+    if (aPriority !== -1 && bPriority !== -1) return aPriority - bPriority
+    return a.code.localeCompare(b.code)
+  })
+  
+  for (const course of sortedCourses) {
+    if (currentCredits + course.credits > creditsPerSemester && currentCredits > 0) {
+      // Start new semester
+      const semesterLabel = currentSeason === 'Fall' ? 'Fall' : 'Spring'
+      result.push({ semester: semesterLabel, year: currentYear, courses: currentSemester, credits: currentCredits })
+      currentSemester = []
+      currentCredits = 0
+      currentSeason = currentSeason === 'Fall' ? 'Spring' : 'Fall'
+      if (currentSeason === 'Fall') currentYear++
+    }
+    currentSemester.push(course)
+    currentCredits += course.credits
+  }
+  
+  // Push remaining courses
+  if (currentSemester.length > 0) {
+    const semesterLabel = currentSeason === 'Fall' ? 'Fall' : 'Spring'
+    result.push({ semester: semesterLabel, year: currentYear, courses: currentSemester, credits: currentCredits })
+  }
+  
+  return result
+}
+
 // Get the appropriate origin tuition based on school code
 function getOriginTuition(schoolCode: string): number {
   const tuitionMap: Record<string, number> = {
@@ -574,22 +620,34 @@ export default function TransferGuideClient({
         ) : (
           <div className="card overflow-hidden mb-6">
             <div className="px-6 py-4 border-b border-slate-200 bg-slate-50">
-              <h2 className="text-lg font-semibold text-slate-900">Required Courses</h2>
+              <h2 className="text-lg font-semibold text-slate-900">Your Transfer Plan</h2>
+              <p className="text-sm text-slate-500">Based on starting {startSemester}, you'll graduate {calculateGradDate(startSemester, primaryStats.totalYears)}</p>
             </div>
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-slate-200">
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Code</th>
-                  <th className="px-6 py-3 text-left text-xs font-semibold text-slate-500 uppercase">Course Name</th>
-                  <th className="px-6 py-3 text-right text-xs font-semibold text-slate-500 uppercase">Credits</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {courses.map((course, idx) => (
-                  <CourseRow key={idx} course={course} />
-                ))}
-              </tbody>
-            </table>
+            <div className="divide-y divide-slate-200">
+              {distributeIntoSemesters(courses, startSemester).map((sem, idx) => (
+                <div key={idx} className="p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-semibold text-slate-800">
+                      {sem.semester} {sem.year} - {sem.credits} credits
+                    </h3>
+                    <span className="text-xs text-slate-500">
+                      {idx === 0 ? 'Community College' : idx < Math.ceil(primaryStats.ccSemesters) ? 'Community College' : 'University'}
+                    </span>
+                  </div>
+                  <table className="w-full">
+                    <tbody className="divide-y divide-slate-100">
+                      {sem.courses.map((course, cidx) => (
+                        <tr key={cidx} className="hover:bg-slate-50">
+                          <td className="py-2 text-sm font-medium text-blue-600">{course.code}</td>
+                          <td className="py-2 text-sm text-slate-600">{course.name}</td>
+                          <td className="py-2 text-sm text-slate-500 text-right">{course.credits}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
