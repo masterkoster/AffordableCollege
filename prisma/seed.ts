@@ -25,6 +25,7 @@ async function main() {
   const univ = [
     { code: 'OU', name: 'Oakland University', type: 'UNIVERSITY' },
     { code: 'WSU', name: 'Wayne State University', type: 'UNIVERSITY' },
+    { code: 'EMU', name: 'Eastern Michigan University', type: 'UNIVERSITY' },
   ]
 
   const schools: any = {}
@@ -255,6 +256,32 @@ async function main() {
       { c: 'CIS 2252', n: 'Data Structures', cr: 4 },
       { c: 'CIS 2353', n: 'Algorithms', cr: 4 },
       { c: 'EGR 1100', n: 'Intro to Engineering', cr: 3 },
+    ] },
+    // EMU Transfer Agreements (from real PDFs/web guides)
+    // HenryFord → EMU Cybersecurity
+    { o: 'HenryFord', t: 'EMU', m: 'CS', r: 'GPA >= 2.0', a: 2.0, c: [
+      { c: 'CIS 100', n: 'Introduction to IT', cr: 3 },
+      { c: 'CIS 111', n: 'SQL for Database', cr: 3 },
+      { c: 'CIS 125', n: 'Principles of Programming Logic', cr: 4 },
+      { c: 'CIS 222', n: 'Data Communications', cr: 3 },
+      { c: 'CIS 240', n: 'Computer Architecture', cr: 3 },
+      { c: 'CIS 250', n: 'Operating Systems', cr: 3 },
+      { c: 'CIS 270', n: 'Network Security', cr: 3 },
+      { c: 'CIS 280', n: 'Information Assurance', cr: 4 },
+      { c: 'ENG 131', n: 'Introduction to College Writing', cr: 3 },
+      { c: 'ENG 132', n: 'College Writing', cr: 3 },
+    ] },
+    // Macomb → EMU Business
+    { o: 'Macomb', t: 'EMU', m: 'BUS', r: 'GPA >= 2.0', a: 2.0, c: [
+      { c: 'ACC 115', n: 'Financial Accounting', cr: 4 },
+      { c: 'ACC 116', n: 'Managerial Accounting', cr: 4 },
+      { c: 'CIS 110', n: 'Intro to Computer Info Systems', cr: 4 },
+      { c: 'BUS 150', n: 'Introduction to Business', cr: 3 },
+      { c: 'ECO 101', n: 'Introduction to Economics', cr: 3 },
+      { c: 'ECO 102', n: 'Principles of Economics', cr: 3 },
+      { c: 'MAT 131', n: 'Descriptive Statistics', cr: 3 },
+      { c: 'ENG 101', n: 'Composition I', cr: 3 },
+      { c: 'ENG 102', n: 'Composition II', cr: 3 },
     ] },
   ]
 
