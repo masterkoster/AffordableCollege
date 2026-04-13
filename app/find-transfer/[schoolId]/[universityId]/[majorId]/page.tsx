@@ -26,23 +26,39 @@ export default async function TransferGuideDetailPage({
   const { schoolId, universityId, majorId } = await params
   const compareUniversityCode = (await searchParams).compare
   
-  // Look up schools by code to get IDs
-  const originSchool = await prisma.school.findUnique({
-    where: { code: schoolId.toUpperCase() },
+  // Look up schools by code to get IDs (case-insensitive)
+  let originSchool = await prisma.school.findUnique({
+    where: { code: schoolId },
   })
-  const targetSchool = await prisma.school.findUnique({
-    where: { code: universityId.toUpperCase() },
+  // Try case-insensitive if exact match fails
+  if (!originSchool) {
+    originSchool = await prisma.school.findFirst({
+      where: { code: { equals: schoolId, mode: 'insensitive' } },
+    })
+  }
+  
+  let targetSchool = await prisma.school.findUnique({
+    where: { code: universityId },
   })
+  if (!targetSchool) {
+    targetSchool = await prisma.school.findFirst({
+      where: { code: { equals: universityId, mode: 'insensitive' } },
+    })
+  }
   
   // If not found by code, try as UUID
   const originSchoolId = originSchool?.id ?? schoolId
   const targetSchoolId = targetSchool?.id ?? universityId
   
-  // Look up major by code, then by name, or use as UUID
+  // Look up major by code (case-insensitive), then by name
   let major = await prisma.major.findUnique({
-    where: { code: majorId.toUpperCase() },
+    where: { code: majorId },
   })
-  // If not found by code, try by name (handles URL edge cases)
+  if (!major) {
+    major = await prisma.major.findFirst({
+      where: { code: { equals: majorId, mode: 'insensitive' } },
+    })
+  }
   if (!major) {
     major = await prisma.major.findFirst({
       where: { name: { equals: majorId, mode: 'insensitive' } },
@@ -87,10 +103,15 @@ export default async function TransferGuideDetailPage({
   // Fetch comparison guide if requested
   let compareGuide = null
   if (compareUniversityCode) {
-    // Look up the school by code to get the ID
-    const compareSchool = await prisma.school.findUnique({
-      where: { code: compareUniversityCode.toUpperCase() },
+    // Look up the school by code (case-insensitive)
+    let compareSchool = await prisma.school.findUnique({
+      where: { code: compareUniversityCode },
     })
+    if (!compareSchool) {
+      compareSchool = await prisma.school.findFirst({
+        where: { code: { equals: compareUniversityCode, mode: 'insensitive' } },
+      })
+    }
     if (compareSchool) {
       compareGuide = await prisma.transferGuide.findFirst({
         where: {
