@@ -57,6 +57,7 @@ interface CompareGuideData {
 type AvailableUniversity = {
   code: string
   name: string
+  id: string
 }
 
 export default function TransferGuideClient({ 
@@ -546,8 +547,9 @@ function ComparisonSelector({
   
   const handleCompare = () => {
     if (selectedCompareId) {
-      // Navigate to the comparison university page with the original as compare param
-      router.push(`/find-transfer/${originSchoolId}/${selectedCompareId}/${majorId}?compare=${guide.targetSchool.code}`)
+      // Navigate to the comparison university page with original as compare param
+      // Use IDs for path, pass original UUID as query param
+      router.push(`/find-transfer/${originSchoolId}/${selectedCompareId}/${majorId}?compareWith=${guide.targetSchool.code}`)
     }
   }
   
@@ -572,7 +574,7 @@ function ComparisonSelector({
             >
               <option value="">Select university to compare...</option>
               {availableUniversities.map((uni) => (
-                <option key={uni.code} value={uni.code}>{uni.name}</option>
+                <option key={uni.id} value={uni.id}>{uni.name}</option>
               ))}
             </select>
             <button 
