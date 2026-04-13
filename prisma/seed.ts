@@ -26,6 +26,8 @@ async function main() {
     { code: 'OU', name: 'Oakland University', type: 'UNIVERSITY' },
     { code: 'WSU', name: 'Wayne State University', type: 'UNIVERSITY' },
     { code: 'EMU', name: 'Eastern Michigan University', type: 'UNIVERSITY' },
+    { code: 'GVSU', name: 'Grand Valley State University', type: 'UNIVERSITY' },
+    { code: 'FSU', name: 'Ferris State University', type: 'UNIVERSITY' },
   ]
 
   const schools: any = {}
@@ -282,6 +284,57 @@ async function main() {
       { c: 'MAT 131', n: 'Descriptive Statistics', cr: 3 },
       { c: 'ENG 101', n: 'Composition I', cr: 3 },
       { c: 'ENG 102', n: 'Composition II', cr: 3 },
+    ] },
+    // GVSU Transfer Agreements (from real PDFs)
+    // Macomb → GVSU Computer Science
+    { o: 'Macomb', t: 'GVSU', m: 'CS', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'MTH 124', n: 'Pre-Calculus', cr: 5 },
+      { c: 'ITCS 162', n: 'Computer Science I', cr: 4 },
+      { c: 'ITCS 163', n: 'Computer Science II', cr: 4 },
+      { c: 'MTH 225', n: 'Discrete Structures', cr: 3 },
+      { c: 'STA 215', n: 'Statistics', cr: 3 },
+      { c: 'COM 201', n: 'Speech', cr: 3 },
+      { c: 'WRT 150', n: 'Strategies in Writing', cr: 4 },
+      { c: 'CHM 115', n: 'General Chemistry I', cr: 4 },
+      { c: 'BIO 120', n: 'General Biology', cr: 4 },
+    ] },
+    // Macomb → GVSU Business
+    { o: 'Macomb', t: 'GVSU', m: 'BUS', r: 'GPA >= 2.5', a: 2.5, c: [
+      { c: 'ACC 115', n: 'Financial Accounting', cr: 4 },
+      { c: 'ACC 116', n: 'Managerial Accounting', cr: 4 },
+      { c: 'BUS 101', n: 'Introduction to Business', cr: 3 },
+      { c: 'ECO 101', n: 'Principles of Economics', cr: 3 },
+      { c: 'ECO 102', n: 'Principles of Economics', cr: 3 },
+      { c: 'MKT 201', n: 'Principles of Marketing', cr: 3 },
+      { c: 'MGT 201', n: 'Principles of Management', cr: 3 },
+      { c: 'STA 215', n: 'Statistics', cr: 3 },
+      { c: 'WRT 150', n: 'Strategies in Writing', cr: 4 },
+    ] },
+    // FSU Transfer Agreements (Ferris State - from transfer guides)
+    // Macomb → FSU Business Administration
+    { o: 'Macomb', t: 'FSU', m: 'BUS', r: 'GPA >= 2.35', a: 2.35, c: [
+      { c: 'ACC 115', n: 'Financial Accounting', cr: 3 },
+      { c: 'ACC 116', n: 'Managerial Accounting', cr: 3 },
+      { c: 'BUS 101', n: 'Introduction to Business', cr: 3 },
+      { c: 'COM 101', n: 'Fundamentals of Speaking', cr: 3 },
+      { c: 'MTH 1221', n: 'College Algebra', cr: 3 },
+      { c: 'STQM 260', n: 'Introduction to Statistics', cr: 3 },
+      { c: 'ENG 101', n: 'Composition I', cr: 3 },
+      { c: 'ENG 102', n: 'Composition II', cr: 3 },
+      { c: 'ECO 101', n: 'Principles of Economics', cr: 3 },
+      { c: 'ECO 102', n: 'Principles of Economics', cr: 3 },
+    ] },
+    // Macomb → FSU Computer Information Systems
+    { o: 'Macomb', t: 'FSU', m: 'CS', r: 'GPA >= 2.35', a: 2.35, c: [
+      { c: 'ITCS 110', n: 'Programming Design & Logic', cr: 3 },
+      { c: 'ITCS 114', n: 'Problem Solving & Programming', cr: 4 },
+      { c: 'ITCS 117', n: 'Object-Oriented Programming', cr: 4 },
+      { c: 'ITCS 225', n: 'Data Structures', cr: 4 },
+      { c: 'CIT 161', n: 'Intro to Microcomputer Systems', cr: 3 },
+      { c: 'MTH 1221', n: 'College Algebra', cr: 3 },
+      { c: 'STQM 260', n: 'Introduction to Statistics', cr: 3 },
+      { c: 'ENG 101', n: 'Composition I', cr: 3 },
+      { c: 'COM 101', n: 'Fundamentals of Speaking', cr: 3 },
     ] },
   ]
 
