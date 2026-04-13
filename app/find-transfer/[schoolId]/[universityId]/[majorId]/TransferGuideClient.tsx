@@ -567,6 +567,16 @@ function ComparisonSelector({
     return null
   }
   
+  // Auto-compare if there's only one option
+  const hasSingleOption = availableUniversities.length === 1
+  const singleOptionId = hasSingleOption ? availableUniversities[0].id : ''
+  
+  // Auto-navigate if there's only one option
+  if (hasSingleOption) {
+    router.push(`/find-transfer/${originSchoolId}/${singleOptionId}/${majorId}?compareWith=${guide.targetSchool.code}`)
+    return null
+  }
+  
   return (
     <div className="card p-6 mb-6 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200">
       <div className="flex items-start gap-4">
