@@ -534,11 +534,21 @@ function ComparisonSelector({
   const router = useRouter()
   const [selectedCompareId, setSelectedCompareId] = useState('')
   
-  // This would be passed from the server in a real implementation
-  // For now, we'll redirect to a comparison page
+  // Get all possible target universities (excluding current)
+  const availableUniversities = [
+    { id: 'ou', name: 'Oakland University' },
+    { id: 'wsu', name: 'Wayne State University' },
+    { id: 'emu', name: 'Eastern Michigan University' },
+    { id: 'gvsu', name: 'Grand Valley State University' },
+    { id: 'fsu', name: 'Ferris State University' },
+    { id: 'wmu', name: 'Western Michigan University' },
+    { id: 'svsu', name: 'Saginaw Valley State University' },
+  ].filter(u => u.id !== guide.targetSchool.code.toLowerCase())
+  
   const handleCompare = () => {
     if (selectedCompareId) {
-      router.push(`/find-transfer/${originSchoolId}/${selectedCompareId}/${majorId}?compare=${guide.id}`)
+      // Navigate to the comparison university page with the original as compare param
+      router.push(`/find-transfer/${originSchoolId}/${selectedCompareId}/${majorId}?compare=${guide.targetSchool.code}`)
     }
   }
   
@@ -557,12 +567,9 @@ function ComparisonSelector({
               className="input-field flex-1"
             >
               <option value="">Select university to compare...</option>
-              <option value="wsu">Wayne State University</option>
-              <option value="emu">Eastern Michigan University</option>
-              <option value="gvsu">Grand Valley State University</option>
-              <option value="fsu">Ferris State University</option>
-              <option value="wmu">Western Michigan University</option>
-              <option value="svsu">Saginaw Valley State University</option>
+              {availableUniversities.map((uni) => (
+                <option key={uni.id} value={uni.id}>{uni.name}</option>
+              ))}
             </select>
             <button 
               onClick={handleCompare}

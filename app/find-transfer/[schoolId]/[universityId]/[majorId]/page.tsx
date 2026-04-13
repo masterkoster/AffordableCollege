@@ -18,8 +18,9 @@ export default async function TransferGuideDetailPage({
   searchParams: Promise<{ compare?: string }>
 }) {
   const { schoolId, universityId, majorId } = await params
-  const compareUniversityId = (await searchParams).compare
+  const compareUniversityCode = (await searchParams).compare
   
+  // Fetch the main guide
   const guide = await prisma.transferGuide.findFirst({
     where: {
       originSchoolId: schoolId,
@@ -32,22 +33,28 @@ export default async function TransferGuideDetailPage({
       major: true,
     },
   })
-
+  
   // Fetch comparison guide if requested
   let compareGuide = null
-  if (compareUniversityId) {
-    compareGuide = await prisma.transferGuide.findFirst({
-      where: {
-        originSchoolId: schoolId,
-        targetSchoolId: compareUniversityId,
-        majorId: majorId,
-      },
-      include: {
-        originSchool: true,
-        targetSchool: true,
-        major: true,
-      },
+  if (compareUniversityCode) {
+    // Look up the school by code to get the ID
+    const compareSchool = await prisma.school.findUnique({
+      where: { code: compareUniversityCode.toUpperCase() },
     })
+    if (compareSchool) {
+      compareGuide = await prisma.transferGuide.findFirst({
+        where: {
+          originSchoolId: schoolId,
+          targetSchoolId: compareSchool.id,
+          majorId: majorId,
+        },
+        include: {
+          originSchool: true,
+          targetSchool: true,
+          major: true,
+        },
+      })
+    }
   }
 
   if (!guide) {
